@@ -1,11 +1,13 @@
-from statics import *
-from functions import *
 import pygame
+from statics import *
+from functions import rotate
+
+bullet_img = pygame.image.load(path.join(img_dir, "laserRed05.png"))
 
 class Bullet(pygame.sprite.Sprite):
-    def __init__(self, parent, image):
+    def __init__(self, parent):
         pygame.sprite.Sprite.__init__(self)
-        self.image = image
+        self.image = bullet_img.convert()
         self.image.set_colorkey(BLACK)
         self.rect = self.image.get_rect()
         self.rect.bottom = parent.rect.centery

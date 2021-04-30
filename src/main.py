@@ -1,159 +1,29 @@
 import pygame
 from statics import *
-from functions import *
-from bullet import *
+from explosion import Explosion
+from player import Player
 
 # iniclaizacja gry i utworzenie okna
 pygame.init()  # inicjalizuje cała bibliotekę
 pygame.mixer.init()  # inicjalizuje dzwięki
-
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Bajki robotow")
 clock = pygame.time.Clock()
 
 # Inicjalizowanie grafiki
-player_img = pygame.image.load(path.join(img_dir, "guardbot3.png")).convert()
-player_orig_img = player_img = pygame.transform.scale(player_img, (120, 120))
 background = pygame.image.load(path.join(img_dir, "hexagonal_background_1080p.png")).convert()
 background_rect = background.get_rect()
-bullet_img = pygame.image.load(path.join(img_dir, "laserRed05.png")).convert()
 
 # Dodawanie muzyki
 pygame.mixer.music.load(path.join(snd_dir, "CleytonRX - Battle RPG Theme Var.ogg"))
 pygame.mixer.music.set_volume(0.4)
 
-
-
-
-
-
-
-
-class Player(pygame.sprite.Sprite):
-    def __init__(self, main_player, respawn):
-        self.main_player = main_player
-        pygame.sprite.Sprite.__init__(self)
-        self.image = player_orig_img
-        self.image.set_colorkey(BLACK)
-        self.rect = self.image.get_rect()
-        if respawn == True:
-            self.rect.centerx = WIDTH
-            self.rect.bottom = HEIGHT
-        else:
-            self.rect.centerx = 0
-            self.rect.bottom = 0
-        self.last_shoot = pygame.time.get_ticks()
-        self.shoot_delay = 350
-        self.direction = None
-
-    def update(self):
-        self.setDirection()
-        self.move()
-        if self.main_player:
-            if self.keystate[pygame.K_SPACE]:
-                self.shoot()
-        else:
-            if self.keystate[pygame.K_LSHIFT]:
-                self.shoot()
-        self.direction = None
-
-    def setDirection(self):
-        self.keystate = pygame.key.get_pressed()
-        if self.main_player:
-            if self.keystate[pygame.K_LEFT]:
-                self.direction = LEFT
-            if self.keystate[pygame.K_RIGHT]:
-                self.direction = RIGHT
-            if self.keystate[pygame.K_UP]:
-                self.direction = UP
-            if self.keystate[pygame.K_DOWN]:
-                self.direction = DOWN
-        else:
-            if self.keystate[pygame.K_a]:
-                self.direction = LEFT
-            if self.keystate[pygame.K_d]:
-                self.direction = RIGHT
-            if self.keystate[pygame.K_w]:
-                self.direction = UP
-            if self.keystate[pygame.K_s]:
-                self.direction = DOWN
-
-    def move(self):
-        self.speedx = 0
-        self.speedy = 0
-        if self.direction == LEFT:
-            self.speedx = -8
-        if self.direction == RIGHT:
-            self.speedx = 8
-        if self.direction == UP:
-            self.speedy = -8
-        if self.direction == DOWN:
-            self.speedy = 8
-
-        self.rect.y += self.speedy
-        self.rect.x += self.speedx
-        if self.rect.right > WIDTH:
-            self.rect.right = WIDTH
-        if self.rect.left < 0:
-            self.rect.left = 0
-        if self.rect.bottom > HEIGHT:
-            self.rect.bottom = HEIGHT
-        if self.rect.top <= 0:
-            self.rect.top = 0
-
-    def shoot(self):
-        now = pygame.time.get_ticks()
-        if now - self.last_shoot > self.shoot_delay:
-            bullet = Bullet(self, bullet_img)
-            all_sprites.add(bullet)
-            bullets.add(bullet)
-            # shoot_sound.play()
-            self.last_shoot = now
-
-
-class Explosion(pygame.sprite.Sprite):
-    def __init__(self, center, size):
-        pygame.sprite.Sprite.__init__(self)
-        self.size = size
-        self.image = explosion_anim[self.size][0]
-        self.rect = self.image.get_rect()
-        self.rect.center = center
-        self.frame = 0
-        self.last_update = pygame.time.get_ticks()
-        self.frame_rate = 50
-
-    def update(self):
-        now = pygame.time.get_ticks()
-        if now - self.last_update > self.frame_rate:
-            self.last_update = now
-            self.frame += 1
-            if self.frame == len(explosion_anim[self.size]):
-                self.kill()
-            else:
-                center = self.rect.center
-                self.image = explosion_anim[self.size][self.frame]
-                self.rect = self.image.get_rect()
-                self.rect.center = center
-
-
-pygame.mixer.music.play(loops=-1)
-
-# Tworzymy grupy, sprite
-all_sprites = pygame.sprite.Group()
-bullets = pygame.sprite.Group()
-players = pygame.sprite.Group()
-player = Player(True, True)
-player_przeciwnik = Player(False, False)
-all_sprites.add(player)
-all_sprites.add(player_przeciwnik)
-players.add(player_przeciwnik)
-players.add(player)
+# Inicjalizacja tablicy eksplozji
 explosion_anim = {}
 explosion_anim["lg"] = []
 explosion_anim["sm"] = []
 for i in range(9):
     filename = "regularExplosion0{}.png".format(i)
-    print(explosions_dir)
     img = pygame.image.load(path.join(explosions_dir, filename)).convert()
     img.set_colorkey(BLACK)
     img_lg = pygame.transform.scale(img, (75, 75))
@@ -161,9 +31,27 @@ for i in range(9):
     img_sm = pygame.transform.scale(img, (32, 32))
     explosion_anim["sm"].append(img_sm)
 
+# Właczenie mixera
+pygame.mixer.music.play(loops=-1)
+
+# Tworzymy grupy, spritów
+all_sprites = pygame.sprite.Group()
+bullets = pygame.sprite.Group()
+players = pygame.sprite.Group()
+
+# Tworzymy graczy
+player = Player(True, True, all_sprites, bullets)
+player_enemy = Player(False, False, all_sprites, bullets)
+
+# Dodanie obiektow do tablic spritów
+all_sprites.add(player)
+all_sprites.add(player_enemy)
+players.add(player_enemy)
+players.add(player)
+
+# Glowna petla programu
 running = True
 while running:
-
     clock.tick(FPS)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -178,7 +66,7 @@ while running:
 
     hit_players = pygame.sprite.groupcollide(players, bullets, True, True)
     for hit_player in hit_players:
-        death_explosion = Explosion(hit_player.rect.center, "lg")
+        death_explosion = Explosion(hit_player.rect.center, "lg", explosion_anim)
         all_sprites.add(death_explosion)
         if len(hit_players) > 0:
             PUNKTY = + 1

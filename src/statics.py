@@ -1,3 +1,5 @@
+from os import path
+
 WIDTH = 1900
 HEIGHT = 1000
 FPS = 60
@@ -15,3 +17,8 @@ RED = (255, 0, 0)
 GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
 YELLOW = (255, 247, 0)
+
+# paths
+img_dir = path.join(path.dirname(__file__), "../assets/img")
+snd_dir = path.join(path.dirname(__file__), "../assets/sound")
+explosions_dir = path.join(path.dirname(__file__), "../assets/img/explosions")

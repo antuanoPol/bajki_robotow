@@ -1,27 +1,6 @@
 import pygame
-from os import path
 from statics import *
 
-# paths
-img_dir = path.join(path.dirname(__file__), "../assets/img")
-snd_dir = path.join(path.dirname(__file__), "../assets/sound")
-explosions_dir = path.join(path.dirname(__file__), "../assets/img/explosions")
-
-# statics
-
-
-LEFT = 'LEFT'
-RIGHT = 'RIGHT'
-UP = 'UP'
-DOWN = 'DOWN'
-
-# COLORS
-WHITE = (255, 255, 255)
-BLACK = (0, 0, 0)
-RED = (255, 0, 0)
-GREEN = (0, 255, 0)
-BLUE = (0, 0, 255)
-YELLOW = (255, 247, 0)
 # iniclaizacja gry i utworzenie okna
 pygame.init()  # inicjalizuje cała bibliotekę
 pygame.mixer.init()  # inicjalizuje dzwięki
@@ -30,10 +9,7 @@ screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Bajki robotow")
 clock = pygame.time.Clock()
 
-font_name = pygame.font.match_font("arial")
-
-# Dodawanie grafik
-print(img_dir)
+# Inicjalizowanie grafiki
 player_img = pygame.image.load(path.join(img_dir, "guardbot3.png")).convert()
 player_orig_img = player_img = pygame.transform.scale(player_img, (120, 120))
 background = pygame.image.load(path.join(img_dir, "hexagonal_background_1080p.png")).convert()
@@ -44,8 +20,8 @@ bullet_img = pygame.image.load(path.join(img_dir, "laserRed05.png")).convert()
 pygame.mixer.music.load(path.join(snd_dir, "CleytonRX - Battle RPG Theme Var.ogg"))
 pygame.mixer.music.set_volume(0.4)
 
-
-# shoot_sound =
+# Iniclaizowanie fontow
+font_name = pygame.font.match_font("arial")
 
 def rotate(rot, image):
     new_image = pygame.transform.rotate(image, rot)

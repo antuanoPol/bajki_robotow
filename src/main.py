@@ -34,7 +34,7 @@ for i in range(9):
     explosion_anim["sm"].append(img_sm)
 
 # Właczenie mixera
-# pygame.mixer.music.play(loops=-1)
+pygame.mixer.music.play(loops=-1)
 
 # Tworzymy grupy, spritów
 all_sprites = pygame.sprite.Group()
@@ -43,8 +43,7 @@ players = pygame.sprite.Group()
 blocks = pygame.sprite.Group()
 
 # Tworzymy graczy
-player = Player(True, True, all_sprites, bullets)
-player_enemy = Player(False, False, all_sprites, bullets)
+player = Player(all_sprites, bullets, blocks)
 
 x = 0
 y = 60
@@ -62,10 +61,8 @@ for rou in level1:
 
 
 # Dodanie obiektow do tablic spritów
-# all_sprites.add(player)
-# all_sprites.add(player_enemy)
-# players.add(player_enemy)
-# players.add(player)
+all_sprites.add(player)
+players.add(player)
 
 # Glowna petla programu
 running = True
@@ -88,5 +85,9 @@ while running:
         all_sprites.add(death_explosion)
         if len(hit_players) > 0:
             PUNKTY = + 1
+
+
+
+
 
 pygame.quit()

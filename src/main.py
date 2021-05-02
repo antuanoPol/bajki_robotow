@@ -4,6 +4,7 @@ from explosion import Explosion
 from player import Player
 from block import Block
 from levels import *
+from sand import Sand
 
 # iniclaizacja gry i utworzenie okna
 pygame.init()  # inicjalizuje cała bibliotekę
@@ -56,7 +57,11 @@ for rou in level1:
             block = Block(x, y)
             blocks.add(block)
             all_sprites.add(block)
+        if block == " ":
+            sand = Sand(x,y)
+            all_sprites.add(sand)
         x += 60
+
 
 
 

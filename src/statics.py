@@ -1,7 +1,7 @@
 from os import path
 
-WIDTH = 1900
-HEIGHT = 1000
+WIDTH = 1800
+HEIGHT = 960
 FPS = 60
 PUNKTY = 0
 

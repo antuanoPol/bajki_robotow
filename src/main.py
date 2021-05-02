@@ -2,6 +2,8 @@ import pygame
 from statics import *
 from explosion import Explosion
 from player import Player
+from block import Block
+from levels import *
 
 # iniclaizacja gry i utworzenie okna
 pygame.init()  # inicjalizuje cała bibliotekę
@@ -11,8 +13,8 @@ pygame.display.set_caption("Bajki robotow")
 clock = pygame.time.Clock()
 
 # Inicjalizowanie grafiki
-background = pygame.image.load(path.join(img_dir, "hexagonal_background_1080p.png")).convert()
-background_rect = background.get_rect()
+# background = pygame.image.load(path.join(img_dir, "hexagonal_background_1080p.png")).convert()
+# background_rect = background.get_rect()
 
 # Dodawanie muzyki
 pygame.mixer.music.load(path.join(snd_dir, "CleytonRX - Battle RPG Theme Var.ogg"))
@@ -32,22 +34,38 @@ for i in range(9):
     explosion_anim["sm"].append(img_sm)
 
 # Właczenie mixera
-pygame.mixer.music.play(loops=-1)
+# pygame.mixer.music.play(loops=-1)
 
 # Tworzymy grupy, spritów
 all_sprites = pygame.sprite.Group()
 bullets = pygame.sprite.Group()
 players = pygame.sprite.Group()
+blocks = pygame.sprite.Group()
 
 # Tworzymy graczy
 player = Player(True, True, all_sprites, bullets)
 player_enemy = Player(False, False, all_sprites, bullets)
 
+x = 0
+y = 60
+for rou in level1:
+    if x == WIDTH:
+        x = 0
+        y += 60
+    for block in rou:
+        if block == "B":
+            block = Block(x, y)
+            blocks.add(block)
+            all_sprites.add(block)
+        x += 60
+
+
+
 # Dodanie obiektow do tablic spritów
-all_sprites.add(player)
-all_sprites.add(player_enemy)
-players.add(player_enemy)
-players.add(player)
+# all_sprites.add(player)
+# all_sprites.add(player_enemy)
+# players.add(player_enemy)
+# players.add(player)
 
 # Glowna petla programu
 running = True
@@ -60,7 +78,7 @@ while running:
     all_sprites.update()
 
     screen.fill(BLACK)
-    screen.blit(background, background_rect)
+    # screen.blit(background, background_rect)
     all_sprites.draw(screen)
     pygame.display.flip()
 

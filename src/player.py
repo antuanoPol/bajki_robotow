@@ -1,5 +1,6 @@
 import pygame
 from statics import *
+from functions import calculate_direction
 from bullet import Bullet
 
 player_img = pygame.image.load(path.join(img_dir, "guardbot3.png"))
@@ -23,38 +24,21 @@ class Player(pygame.sprite.Sprite):
         self.last_shoot = pygame.time.get_ticks()
         self.shoot_delay = 350
         self.direction = None
+        self.bullet_direction = UP
 
     def update(self):
-        self.setDirection()
+        keystate = pygame.key.get_pressed()
+        self.set_direction(keystate)
         self.move()
-        if self.main_player:
-            if self.keystate[pygame.K_SPACE]:
-                self.shoot()
-        else:
-            if self.keystate[pygame.K_LSHIFT]:
-                self.shoot()
+        if (self.main_player and keystate[pygame.K_SPACE]) or (not self.main_player and keystate[pygame.K_LSHIFT]):
+            self.shoot()
         self.direction = None
 
-    def setDirection(self):
-        self.keystate = pygame.key.get_pressed()
-        if self.main_player:
-            if self.keystate[pygame.K_LEFT]:
-                self.direction = LEFT
-            if self.keystate[pygame.K_RIGHT]:
-                self.direction = RIGHT
-            if self.keystate[pygame.K_UP]:
-                self.direction = UP
-            if self.keystate[pygame.K_DOWN]:
-                self.direction = DOWN
-        else:
-            if self.keystate[pygame.K_a]:
-                self.direction = LEFT
-            if self.keystate[pygame.K_d]:
-                self.direction = RIGHT
-            if self.keystate[pygame.K_w]:
-                self.direction = UP
-            if self.keystate[pygame.K_s]:
-                self.direction = DOWN
+    def set_direction(self, keystate):
+        direction = calculate_direction(self.main_player, keystate)
+        if direction is not None:
+            self.direction = direction
+            self.bullet_direction = self.direction
 
     def move(self):
         self.speedx = 0

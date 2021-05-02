@@ -4,6 +4,7 @@ from functions import rotate
 
 bullet_img = pygame.image.load(path.join(img_dir, "laserRed05.png"))
 
+
 class Bullet(pygame.sprite.Sprite):
     def __init__(self, parent):
         pygame.sprite.Sprite.__init__(self)
@@ -13,14 +14,14 @@ class Bullet(pygame.sprite.Sprite):
         self.rect.bottom = parent.rect.centery
         self.rect.centerx = parent.rect.centerx
         self.speed = 25
-        self.direction = parent.direction
+        self.direction = parent.bullet_direction
         if self.direction == LEFT or self.direction == RIGHT:
             self.image = rotate(90, self.image)
             self.image.set_colorkey(BLACK)
             self.rect = self.image.get_rect()
             self.rect.bottom = parent.rect.centery
             self.rect.centerx = parent.rect.centerx
-        if self.direction == UP or self.direction is None:
+        if self.direction == UP:
             self.rect.bottom = parent.rect.top - 20
         if self.direction == DOWN:
             self.rect.bottom = parent.rect.bottom + 60
@@ -32,7 +33,7 @@ class Bullet(pygame.sprite.Sprite):
     def update(self):
         if self.direction == LEFT:
             self.rect.x -= self.speed
-        if self.direction == UP or self.direction is None:
+        if self.direction == UP:
             self.rect.y -= self.speed
         if self.direction == DOWN:
             self.rect.y += self.speed

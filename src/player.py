@@ -6,21 +6,40 @@ from bullet import Bullet
 player_img = pygame.image.load(path.join(img_dir, "guardbot3.png"))
 player_orig_img = player_img = pygame.transform.scale(player_img, (50, 50))
 
+player_animation = {}
+player_animation[LEFT] = []
+player_animation[DOWN] = []
+player_animation[UP] = []
+player_animation[RIGHT] = []
+
+for direction in [LEFT, RIGHT, UP, DOWN]:
+    for i in range(4):
+        file_name = direction.lower() + "_" + str(i + 1) + ".png"
+        file = pygame.image.load(path.join(robot_animation_dir, file_name))
+        file = pygame.transform.scale(file, (50, 50))
+        image = file
+        image.set_colorkey(BLACK)
+        player_animation[direction].append(image)
+
+
 class Player(pygame.sprite.Sprite):
-    def __init__(self,  all_sprites, bullets, blocks):
+    def __init__(self, all_sprites, bullets, blocks):
         pygame.sprite.Sprite.__init__(self)
         self.blocks = blocks
         self.all_sprites = all_sprites
         self.bullets = bullets
-        self.image = player_img.convert()
+        self.image = player_animation[UP][0]
         self.image.set_colorkey(BLACK)
         self.rect = self.image.get_rect()
-        self.rect.centerx = WIDTH - 100
-        self.rect.bottom = HEIGHT - 70
+        self.rect.centerx = 400
+        self.rect.bottom = HEIGHT - 240
         self.last_shoot = pygame.time.get_ticks()
         self.shoot_delay = 350
         self.direction = None
         self.bullet_direction = UP
+        self.frame = 0
+        self.last_update = pygame.time.get_ticks()
+        self.frame_rate = 50
 
     def update(self):
         keystate = pygame.key.get_pressed()
@@ -41,13 +60,14 @@ class Player(pygame.sprite.Sprite):
         self.speedx = 0
         self.speedy = 0
         if self.direction == LEFT:
-            self.speedx = -8
+            self.speedx = -6
         if self.direction == RIGHT:
-            self.speedx = 8
+            self.speedx = 6
         if self.direction == UP:
-            self.speedy = -8
+            self.speedy = -6
         if self.direction == DOWN:
-            self.speedy = 8
+            self.speedy = 6
+        self.animated()
 
         self.rect.y += self.speedy
         self.rect.x += self.speedx
@@ -73,10 +93,28 @@ class Player(pygame.sprite.Sprite):
         walls_you_hit = pygame.sprite.spritecollide(self, self.blocks, False)
         if len(walls_you_hit) > 0:
             if self.direction == LEFT and walls_you_hit[0].rect.left < self.rect.centerx:
-                self.rect.left = walls_you_hit[0].rect.right + 5
+                self.rect.left = walls_you_hit[0].rect.right + 4
             if self.direction == RIGHT and walls_you_hit[0].rect.right > self.rect.centerx:
-                self.rect.right = walls_you_hit[0].rect.left - 5
+                self.rect.right = walls_you_hit[0].rect.left - 4
             if self.direction == UP and walls_you_hit[0].rect.bottom < self.rect.centery:
-                self.rect.top = walls_you_hit[0].rect.bottom + 5
+                self.rect.top = walls_you_hit[0].rect.bottom + 4
             if self.direction == DOWN and walls_you_hit[0].rect.top > self.rect.centery:
-                self.rect.bottom = walls_you_hit[0].rect.top - 5
+                self.rect.bottom = walls_you_hit[0].rect.top - 4
+
+    def animated(self):
+        now = pygame.time.get_ticks()
+        if self.direction == None:
+            self.image = player_animation[UP][0]
+            return
+        if now - self.last_update > self.frame_rate:
+            self.last_update = now
+            self.frame += 1
+        if self.frame == 3:
+            self.frame = 0
+        else:
+            center = self.rect.center
+            self.image = player_animation[self.direction][self.frame]
+            self.rect = self.image.get_rect()
+            self.rect.center = center
+
+

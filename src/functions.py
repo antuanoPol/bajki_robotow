@@ -30,3 +30,5 @@ def calculate_direction(keystate):
         direction = DOWN
 
     return direction
+
+#def replaceDoorWithSand():

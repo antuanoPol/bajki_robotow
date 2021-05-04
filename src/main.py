@@ -5,6 +5,7 @@ from player import Player
 from block import Block
 from levels import *
 from sand import Sand
+from door import Door
 
 # iniclaizacja gry i utworzenie okna
 pygame.init()  # inicjalizuje cała bibliotekę
@@ -14,8 +15,8 @@ pygame.display.set_caption("Bajki robotow")
 clock = pygame.time.Clock()
 
 # Inicjalizowanie grafiki
-# background = pygame.image.load(path.join(img_dir, "hexagonal_background_1080p.png")).convert()
-# background_rect = background.get_rect()
+
+
 
 # Dodawanie muzyki
 pygame.mixer.music.load(path.join(snd_dir, "CleytonRX - Battle RPG Theme Var.ogg"))
@@ -25,8 +26,8 @@ pygame.mixer.music.set_volume(0.4)
 explosion_anim = {}
 explosion_anim["lg"] = []
 explosion_anim["sm"] = []
-for i in range(9):
-    filename = "regularExplosion0{}.png".format(i)
+for kierunek in range(9):
+    filename = "regularExplosion0{}.png".format(kierunek)
     img = pygame.image.load(path.join(explosions_dir, filename)).convert()
     img.set_colorkey(BLACK)
     img_lg = pygame.transform.scale(img, (75, 75))
@@ -42,10 +43,11 @@ all_sprites = pygame.sprite.Group()
 bullets = pygame.sprite.Group()
 players = pygame.sprite.Group()
 blocks = pygame.sprite.Group()
+doors = []
+sands = pygame.sprite.Group()
 
 # Tworzymy graczy
 player = Player(all_sprites, bullets, blocks)
-
 x = 0
 y = 60
 for rou in level1:
@@ -58,12 +60,14 @@ for rou in level1:
             blocks.add(block)
             all_sprites.add(block)
         if block == " ":
-            sand = Sand(x,y)
+            sand = Sand(x, y)
             all_sprites.add(sand)
+        if block == "D":
+            door = Door(x, y, players)
+            all_sprites.add(door)
+            doors.append(door)
+
         x += 60
-
-
-
 
 # Dodanie obiektow do tablic spritów
 all_sprites.add(player)
@@ -80,8 +84,18 @@ while running:
     all_sprites.update()
 
     screen.fill(BLACK)
-    # screen.blit(background, background_rect)
     all_sprites.draw(screen)
+
+    for door in doors:
+        if door.isOpened:
+            x = door.rect.x
+            y = door.rect.bottom
+            door.kill()
+            sand = Sand(x, y)
+            sands.add(sand)
+            sands.draw(screen)
+
+
     pygame.display.flip()
 
     hit_players = pygame.sprite.groupcollide(players, bullets, True, True)
@@ -90,9 +104,5 @@ while running:
         all_sprites.add(death_explosion)
         if len(hit_players) > 0:
             PUNKTY = + 1
-
-
-
-
 
 pygame.quit()

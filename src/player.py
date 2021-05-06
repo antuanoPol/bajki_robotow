@@ -1,10 +1,21 @@
 import pygame
-from statics import *
-from functions import calculate_direction
+
 from bullet import Bullet
+from functions import calculate_direction
+from statics import *
+
+PLAYER_POSITION_X = 340
+PLAYER_POSITION_Y = HEIGHT - 240
 
 player_img = pygame.image.load(path.join(img_dir, "guardbot3.png"))
 player_orig_img = player_img = pygame.transform.scale(player_img, (50, 50))
+
+
+boss_animation = {}
+boss_animation[LEFT] = []
+boss_animation[DOWN] = []
+boss_animation[UP] = []
+boss_animation[RIGHT] = []
 
 player_animation = {}
 player_animation[LEFT] = []
@@ -21,19 +32,23 @@ for direction in [LEFT, RIGHT, UP, DOWN]:
         image.set_colorkey(BLACK)
         player_animation[direction].append(image)
 
+    for i in range(8):
+        file_name = direction.lower() + "_" + str(i + 1) + ".png"
+        file = pygame.image.load(path.join(boss_animation_dir, file_name))
+        file = pygame.transform.scale(file, (110, 110))
+        image = file
+        image.set_colorkey(BLACK)
+        boss_animation[direction].append(image)
+
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, all_sprites, bullets, blocks, player):
+    def __init__(self, all_sprites, bullets, blocks):
         pygame.sprite.Sprite.__init__(self)
-        if player:
-            self.image = player_animation[UP][0]
-            self.image.set_colorkey(BLACK)
-            self.rect = self.image.get_rect()
-            self.rect.centerx = 340
-            self.rect.bottom = HEIGHT - 240
-        else:
-            print("boss")
-
+        self.def_image = player_animation[UP][0]
+        self.image = self.def_image
+        self.image.set_colorkey(BLACK)
+        self.rect = self.image.get_rect()
+        self.position()
         self.blocks = blocks
         self.all_sprites = all_sprites
         self.bullets = bullets
@@ -45,6 +60,9 @@ class Player(pygame.sprite.Sprite):
         self.last_update = pygame.time.get_ticks()
         self.frame_rate = 50
 
+    def position(self):
+        self.rect.centerx = PLAYER_POSITION_X
+        self.rect.bottom = PLAYER_POSITION_Y
 
     def update(self):
         keystate = pygame.key.get_pressed()
@@ -109,7 +127,7 @@ class Player(pygame.sprite.Sprite):
     def animated(self):
         now = pygame.time.get_ticks()
         if self.direction == None:
-            self.image = player_animation[UP][0]
+            self.image = self.def_image
             return
         if now - self.last_update > self.frame_rate:
             self.last_update = now
@@ -123,3 +141,28 @@ class Player(pygame.sprite.Sprite):
             self.rect.center = center
 
 
+class Boss(Player):
+    def __init__(self, all_sprites, bullets, blocks):
+        super().__init__(all_sprites, bullets, blocks)
+        self.def_image = boss_animation[UP][0]
+
+    def position(self):
+        self.rect.centerx = 1440
+        self.rect.bottom = 400
+
+
+    def animated(self):
+        now = pygame.time.get_ticks()
+        if self.direction == None:
+            self.image = self.def_image
+            return
+        if now - self.last_update > self.frame_rate:
+            self.last_update = now
+            self.frame += 1
+        if self.frame == 3:
+            self.frame = 0
+        else:
+            center = self.rect.center
+            self.image = boss_animation[self.direction][self.frame]
+            self.rect = self.image.get_rect()
+            self.rect.center = center

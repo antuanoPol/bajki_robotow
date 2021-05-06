@@ -2,6 +2,7 @@ import pygame
 from statics import *
 from explosion import Explosion
 from player import Player
+from player import Boss
 from block import Block
 from levels import *
 from sand import Sand
@@ -47,7 +48,7 @@ doors = pygame.sprite.Group()
 sands = pygame.sprite.Group()
 
 # Tworzymy graczy
-player = Player(all_sprites, bullets, blocks, True)
+player = Boss(all_sprites, bullets, blocks)
 x = 0
 y = 60
 for rou in level1:

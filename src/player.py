@@ -23,16 +23,20 @@ for direction in [LEFT, RIGHT, UP, DOWN]:
 
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, all_sprites, bullets, blocks):
+    def __init__(self, all_sprites, bullets, blocks, player):
         pygame.sprite.Sprite.__init__(self)
+        if player:
+            self.image = player_animation[UP][0]
+            self.image.set_colorkey(BLACK)
+            self.rect = self.image.get_rect()
+            self.rect.centerx = 340
+            self.rect.bottom = HEIGHT - 240
+        else:
+            print("boss")
+
         self.blocks = blocks
         self.all_sprites = all_sprites
         self.bullets = bullets
-        self.image = player_animation[UP][0]
-        self.image.set_colorkey(BLACK)
-        self.rect = self.image.get_rect()
-        self.rect.centerx = 400
-        self.rect.bottom = HEIGHT - 240
         self.last_shoot = pygame.time.get_ticks()
         self.shoot_delay = 350
         self.direction = None
@@ -40,6 +44,7 @@ class Player(pygame.sprite.Sprite):
         self.frame = 0
         self.last_update = pygame.time.get_ticks()
         self.frame_rate = 50
+
 
     def update(self):
         keystate = pygame.key.get_pressed()

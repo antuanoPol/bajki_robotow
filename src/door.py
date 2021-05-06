@@ -25,20 +25,17 @@ class Door(pygame.sprite.Sprite):
         self.rect.bottom = y
         self.frame = 0
         self.last_update = pygame.time.get_ticks()
-        self.frame_rate = 40
+        self.frame_rate = 20
         self.players = players
-        self.isOpened = False
 
 
     def animated(self):
-        if self.isOpened:
-            return
         now = pygame.time.get_ticks()
         if now - self.last_update > self.frame_rate:
             self.last_update = now
             self.frame += 1
             if self.frame == len(doors_animation):
-                self.isOpened = True
+                self.kill()
             else:
                 center = self.rect.center
                 self.image = doors_animation[self.frame]

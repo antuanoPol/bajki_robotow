@@ -43,11 +43,11 @@ all_sprites = pygame.sprite.Group()
 bullets = pygame.sprite.Group()
 players = pygame.sprite.Group()
 blocks = pygame.sprite.Group()
-doors = []
+doors = pygame.sprite.Group()
 sands = pygame.sprite.Group()
 
 # Tworzymy graczy
-player = Player(all_sprites, bullets, blocks)
+player = Player(all_sprites, bullets, blocks, True)
 x = 0
 y = 60
 for rou in level1:
@@ -56,16 +56,26 @@ for rou in level1:
         y += 60
     for block in rou:
         if block == "B":
-            block = Block(x, y)
+            block = Block(x, y, 1)
             blocks.add(block)
             all_sprites.add(block)
         if block == " ":
             sand = Sand(x, y)
             all_sprites.add(sand)
         if block == "D":
+            sand = Sand(x, y)
+            all_sprites.add(sand)
             door = Door(x, y, players)
             all_sprites.add(door)
-            doors.append(door)
+            doors.add(door)
+        if block == "W":
+            block = Block(x, y, 2)
+            blocks.add(block)
+            all_sprites.add(block)
+        if block == "S":
+            block = Block(x, y, 3)
+            blocks.add(block)
+            all_sprites.add(block)
 
         x += 60
 
@@ -86,16 +96,6 @@ while running:
     screen.fill(BLACK)
     all_sprites.draw(screen)
 
-    for door in doors:
-        if door.isOpened:
-            x = door.rect.x
-            y = door.rect.bottom
-            door.kill()
-            sand = Sand(x, y)
-            sands.add(sand)
-            sands.draw(screen)
-
-
     pygame.display.flip()
 
     hit_players = pygame.sprite.groupcollide(players, bullets, True, True)
@@ -104,5 +104,8 @@ while running:
         all_sprites.add(death_explosion)
         if len(hit_players) > 0:
             PUNKTY = + 1
+
+    hit_walls = pygame.sprite.groupcollide(bullets , blocks, True, False)
+    hit_walls2 = pygame.sprite.groupcollide(bullets,doors, True, False)
 
 pygame.quit()

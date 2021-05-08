@@ -6,7 +6,7 @@ bullet_img = pygame.image.load(path.join(img_dir, "laserRed05.png"))
 
 
 class Bullet(pygame.sprite.Sprite):
-    def __init__(self, parent):
+    def __init__(self, parent, boss):
         pygame.sprite.Sprite.__init__(self)
         self.image = bullet_img.convert()
         self.image.set_colorkey(BLACK)
@@ -19,10 +19,16 @@ class Bullet(pygame.sprite.Sprite):
             self.image = rotate(90, self.image)
             self.image.set_colorkey(BLACK)
             self.rect = self.image.get_rect()
-            self.rect.bottom = parent.rect.centery
             self.rect.centerx = parent.rect.centerx
+            self.rect.bottom = parent.rect.centery
+        if boss == True:
+            if self.direction == UP:
+                self.rect.centerx = parent.rect.centerx - 20
         if self.direction == UP:
             self.rect.bottom = parent.rect.top - 20
+        if boss == True:
+            if self.direction == DOWN:
+                self.rect.centerx += 20
         if self.direction == DOWN:
             self.rect.bottom = parent.rect.bottom + 60
         if self.direction == RIGHT:

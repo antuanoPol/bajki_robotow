@@ -106,7 +106,7 @@ class Player(pygame.sprite.Sprite):
     def shoot(self):
         now = pygame.time.get_ticks()
         if now - self.last_shoot > self.shoot_delay:
-            bullet = Bullet(self)
+            bullet = Bullet(self, True)
             self.all_sprites.add(bullet)
             self.bullets.add(bullet)
             # shoot_sound.play()
@@ -166,3 +166,12 @@ class Boss(Player):
             self.image = boss_animation[self.direction][self.frame]
             self.rect = self.image.get_rect()
             self.rect.center = center
+
+    def shoot(self):
+        now = pygame.time.get_ticks()
+        if now - self.last_shoot > self.shoot_delay:
+            bullet = Bullet(self, True)
+            self.all_sprites.add(bullet)
+            self.bullets.add(bullet)
+            # shoot_sound.play()
+            self.last_shoot = now

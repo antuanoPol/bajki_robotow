@@ -5,53 +5,53 @@ from src.statics import *
 questions_datas = []
 
 question_data_1 = {}
-question_data_1['TEXT'] = ["Czy robot może być człowiekiem ? (Naciśnij 1, 2 lub 3)",
-                           "1. Pewnie że tak",
-                           "2. Chyba a może jednak nie jest to takie pewne",
-                           "3. Absolutnie nie, robot to robot a człowiek to człowiek!"
+question_data_1['TEXT'] = ["Jak nazywał się strachliwy król który był następcą Heliksandra? (Naciśnij 1, 2 lub 3)",
+                           "1. Król Midas",
+                           "2. Król Murdas",
+                           "3. Miał dwa imiona Automateusza i Herkules"
                            ]
-question_data_1['ANSWER'] = 1
+question_data_1['ANSWER'] = 2
 
 question_data_2 = {}
-question_data_2['TEXT'] = ["Czy robot może być człowiekiem ? (Naciśnij 1, 2 lub 3)",
-                           "1. Pewnie że tak",
-                           "2. Chyba a może jednak nie jest to takie pewne",
-                           "3. Absolutnie nie, robot to robot a człowiek to człowiek!"
+question_data_2['TEXT'] = ["Ilu było elektrycerzy? (Naciśnij 1, 2 lub 3)",
+                           "1. Trzech",
+                           "2. Sześciu",
+                           "3. Pięciu"
                            ]
-question_data_2['ANSWER'] = 2
+question_data_2['ANSWER'] = 1
 
 question_data_3 = {}
-question_data_3['TEXT'] = ["Czy robot może być człowiekiem ? (Naciśnij 1, 2 lub 3)",
-                           "1. Pewnie że tak",
-                           "2. Chyba a może jednak nie jest to takie pewne",
-                           "3. Absolutnie nie, robot to robot a człowiek to człowiek!"
+question_data_3['TEXT'] = ["Kto był władcą Kybery? (Naciśnij 1, 2 lub 3)",
+                           "1. Poleander",
+                           "2. W króleswtie panowało bezkrólewie",
+                           "3. Był nim Architor!"
                            ]
-question_data_3['ANSWER'] = 2
+question_data_3['ANSWER'] = 1
 
 question_data_4 = {}
-question_data_4['TEXT'] = ["Czy robot może być człowiekiem ? (Naciśnij 1, 2 lub 3)",
-                           "1. Pewnie że tak",
-                           "2. Chyba a może jednak nie jest to takie pewne",
-                           "3. Absolutnie nie, robot to robot a człowiek to człowiek!"
+question_data_4['TEXT'] = ["Kto napisał książkę ""Bajki robotów"" ? (Naciśnij 1, 2 lub 3)",
+                           "1. Olga Tokarczuk",
+                           "2. Jan Brzechwa",
+                           "3. Stanisław Lem"
                            ]
-question_data_4['ANSWER'] = 2
+question_data_4['ANSWER'] = 3
 
 question_data_5 = {}
-question_data_5['TEXT'] = ["Czy robot może być człowiekiem ? (Naciśnij 1, 2 lub 3)",
-                           "1. Pewnie że tak",
-                           "2. Chyba a może jednak nie jest to takie pewne",
-                           "3. Absolutnie nie, robot to robot a człowiek to człowiek!"
+question_data_5['TEXT'] = ["Kto został nowym władcą Aktynurii ? (Naciśnij 1, 2 lub 3)",
+                           "1. Został nim syn obecnego władcy",
+                           "2. Kosmogonik",
+                           "3. Pyron"
                            ]
-question_data_5['ANSWER'] = 2
+question_data_5['ANSWER'] = 3
 
 
 question_data_6 = {}
-question_data_6['TEXT'] = ["Czy robot może być człowiekiem ? (Naciśnij 1, 2 lub 3)",
-                           "1. Pewnie że tak",
-                           "2. Chyba a może jednak nie jest to takie pewne",
-                           "3. Absolutnie nie, robot to robot a człowiek to człowiek!"
+question_data_6['TEXT'] = ["Jak nazywał się elektroniczny przyjaciel Automateusza? (Naciśnij 1, 2 lub 3)",
+                           "1. Wok",
+                           "2. Nie miał imienia wszyscy nazywali go komputerkiem",
+                           "3. Wuch"
                            ]
-question_data_6['ANSWER'] = 2
+question_data_6['ANSWER'] = 3
 
 questions_datas.append(question_data_1)
 questions_datas.append(question_data_2)

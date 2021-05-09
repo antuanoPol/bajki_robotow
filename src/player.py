@@ -4,6 +4,7 @@ from bullet import Bullet
 from functions import calculate_direction
 from statics import *
 
+
 PLAYER_POSITION_X = 340
 PLAYER_POSITION_Y = HEIGHT - 240
 
@@ -143,9 +144,10 @@ class Player(pygame.sprite.Sprite):
 
 
 class Boss(Player):
-    def __init__(self, all_sprites, bullets, blocks):
-        super().__init__(all_sprites, bullets, blocks)
+    def __init__(self, all_sprites, bullets, blocks, if_boss):
+        super().__init__(all_sprites, bullets, blocks, if_boss)
         self.def_image = boss_animation[UP][0]
+        self.if_boss = if_boss
 
     def position(self):
         self.rect.centerx = 1440
@@ -171,7 +173,7 @@ class Boss(Player):
     def shoot(self):
         now = pygame.time.get_ticks()
         if now - self.last_shoot > self.shoot_delay:
-            bullet = Bullet(self, True)
+            bullet = Bullet(self, self.if_boss)
             self.all_sprites.add(bullet)
             self.bullets.add(bullet)
             # shoot_sound.play()

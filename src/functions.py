@@ -1,8 +1,11 @@
 import pygame
 from statics import *
 
-# Iniclaizowanie fontow
+# Iniclaizowanie potrzebnych zmiennych
 font_name = pygame.font.match_font("arial")
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
+clock = pygame.time.Clock()
+background = pygame.image.load(path.join(img_dir, "background-scifi.png")).convert()
 
 
 def rotate(rot, image):
@@ -31,4 +34,17 @@ def calculate_direction(keystate):
 
     return direction
 
-#def replaceDoorWithSand():
+def show_go_screen():
+    screen.blit(background, background.get_rect())
+    draw_text(screen, "BAJKI ROBOTÓW", 84, WIDTH / 2, HEIGHT / 4)
+    draw_text(screen, "Press arrows key to move, Space to fire", 42, WIDTH/2, HEIGHT/2)
+    draw_text(screen, "Click any key to begin the game", 28, WIDTH/ 2, HEIGHT*3/4 )
+    pygame.display.flip()
+    waiting = True
+    while waiting:
+        clock.tick(FPS)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+            if event.type == pygame.KEYUP:
+                waiting = False

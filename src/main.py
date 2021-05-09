@@ -114,12 +114,21 @@ while running:
     for player in players:
         player.can_move = not question_asked(questions)
 
-    if exit_door_opened(doors) and not boss_fight:
+    # if exit_door_opened(doors) and not boss_fight:
+    #     for block in inner_blocks:
+    #         block.kill()
+    #     for door in doors:
+    #         door.kill()
+    #     boss = Boss(all_sprites, bullets, blocks, True)
+    #     all_sprites.add(boss)
+    #     boss_fight = True
+
+    if not boss_fight:
         for block in inner_blocks:
             block.kill()
         for door in doors:
             door.kill()
-        boss = Boss(all_sprites, bullets, blocks, True)
+        boss = Boss(all_sprites, bullets, blocks, True, player)
         all_sprites.add(boss)
         boss_fight = True
 

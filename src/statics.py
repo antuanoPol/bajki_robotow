@@ -11,7 +11,7 @@ UP = 'UP'
 DOWN = 'DOWN'
 
 SMERC = 0
-
+WYGRANA = 0
 # COLORS
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)

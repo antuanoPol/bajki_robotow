@@ -3,6 +3,7 @@ from statics import *
 
 door_img = pygame.image.load(path.join(img_dir, "Scifi Spritesheet.png"))
 door_orig_img = pygame.transform.scale(door_img, (60, 60))
+door_open_sound = pygame.mixer.Sound(path.join(snd_dir, "door.mp3"))
 
 
 
@@ -31,6 +32,7 @@ class Door(pygame.sprite.Sprite):
 
     def animated(self):
         now = pygame.time.get_ticks()
+        door_open_sound.play()
         if now - self.last_update > self.frame_rate:
             self.last_update = now
             self.frame += 1

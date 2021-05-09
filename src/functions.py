@@ -48,3 +48,15 @@ def show_go_screen():
                 pygame.quit()
             if event.type == pygame.KEYUP:
                 waiting = False
+def show_win_screen():
+    screen.blit(background, background.get_rect())
+    draw_text(screen, "YOU WIN", 84, WIDTH/2, HEIGHT/ 4)
+    pygame.display.flip()
+    waiting = True
+    while waiting:
+        clock.tick(FPS)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+            if event.type == pygame.KEYUP:
+                waiting = False

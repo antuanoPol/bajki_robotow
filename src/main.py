@@ -81,6 +81,7 @@ for rou in level1:
 
         x += 60
 
+
 # Dodanie obiektow do tablic spritów
 
 # Glowna petla programu

@@ -48,7 +48,7 @@ doors = pygame.sprite.Group()
 sands = pygame.sprite.Group()
 
 # Tworzymy graczy
-player = Boss(all_sprites, bullets, blocks)
+player = Player(all_sprites, bullets, blocks, True)
 x = 0
 y = 60
 for rou in level1:

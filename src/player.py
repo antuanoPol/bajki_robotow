@@ -42,8 +42,9 @@ for direction in [LEFT, RIGHT, UP, DOWN]:
 
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, all_sprites, bullets, blocks):
+    def __init__(self, all_sprites, bullets, blocks, if_boss):
         pygame.sprite.Sprite.__init__(self)
+        self.if_boss = if_boss
         self.def_image = player_animation[UP][0]
         self.image = self.def_image
         self.image.set_colorkey(BLACK)
@@ -106,7 +107,7 @@ class Player(pygame.sprite.Sprite):
     def shoot(self):
         now = pygame.time.get_ticks()
         if now - self.last_shoot > self.shoot_delay:
-            bullet = Bullet(self, True)
+            bullet = Bullet(self, self.if_boss)
             self.all_sprites.add(bullet)
             self.bullets.add(bullet)
             # shoot_sound.play()

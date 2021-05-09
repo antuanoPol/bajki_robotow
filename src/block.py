@@ -1,5 +1,6 @@
 import pygame
-from statics import *
+
+from src.statics import *
 
 block_img = pygame.image.load(path.join(img_dir, "metal.png"))
 block_img_warning = pygame.image.load(path.join(img_dir, "metalCenterWarning.png"))
@@ -7,8 +8,9 @@ block_img_warning_sticker = pygame.image.load(path.join(img_dir, "metalCenterSti
 block_orig_img = pygame.transform.scale(block_img, (60, 60))
 
 
-class Block (pygame.sprite.Sprite):
-    def __init__(self,x,y,img):
+class Block(pygame.sprite.Sprite):
+    def __init__(self, x, y, img):
+        self._layer = 2
         pygame.sprite.Sprite.__init__(self)
         if img == 1:
             self.image = block_orig_img.convert()
@@ -20,4 +22,3 @@ class Block (pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.left = x
         self.rect.bottom = y
-

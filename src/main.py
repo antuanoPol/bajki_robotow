@@ -1,13 +1,11 @@
-import pygame
-from statics import *
-from explosion import Explosion
-from player import Player
-from player import Boss
-from block import Block
-from levels import *
-from sand import Sand
-from door import Door
-from functions import *
+from src.block import Block
+from src.door import Door
+from src.explosion import Explosion
+from src.functions import *
+from src.levels import *
+from src.player import Boss
+from src.player import Player
+from src.sand import Sand
 
 # iniclaizacja gry i utworzenie okna
 pygame.init()  # inicjalizuje cała bibliotekę
@@ -15,14 +13,14 @@ pygame.mixer.init()  # inicjalizuje dzwięki
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Bajki robotow")
 clock = pygame.time.Clock()
-background = pygame.image.load(path.join(img_dir, "background-scifi.png")).convert()
 
 # Inicjalizowanie grafiki
-
+background = pygame.image.load(path.join(img_dir, "background-scifi.png")).convert()
 
 # Dodawanie muzyki
 pygame.mixer.music.load(path.join(snd_dir, "CleytonRX - Battle RPG Theme Var.ogg"))
-pygame.mixer.music.set_volume(0.4)
+pygame.mixer.music.set_volume(0.3)
+explosion_sound = pygame.mixer.Sound(path.join(snd_dir, "explosion.wav"))
 
 # Inicjalizacja tablicy eksplozji
 explosion_anim = {}
@@ -41,66 +39,89 @@ for kierunek in range(9):
 pygame.mixer.music.play(loops=-1)
 
 # Tworzymy grupy, spritów
-all_sprites = pygame.sprite.Group()
-bullets = pygame.sprite.Group()
-players = pygame.sprite.Group()
-blocks = pygame.sprite.Group()
-doors = pygame.sprite.Group()
-sands = pygame.sprite.Group()
-# Tworzymy graczy
+all_sprites = pygame.sprite.LayeredUpdates()
+bullets = pygame.sprite.LayeredUpdates()
+players = pygame.sprite.LayeredUpdates()
+blocks = pygame.sprite.LayeredUpdates()
+inner_blocks = pygame.sprite.LayeredUpdates()
+doors = pygame.sprite.LayeredUpdates()
+sands = pygame.sprite.LayeredUpdates()
+questions = pygame.sprite.LayeredUpdates()
 
 
-x = 0
-y = 60
-for rou in level1:
-    if x == WIDTH:
-        x = 0
-        y += 60
-    for block in rou:
-        if block == "B":
-            block = Block(x, y, 1)
-            blocks.add(block)
-            all_sprites.add(block)
-        if block == " ":
-            sand = Sand(x, y)
-            all_sprites.add(sand)
-        if block == "D":
-            sand = Sand(x, y)
-            all_sprites.add(sand)
-            door = Door(x, y, players)
-            all_sprites.add(door)
-            doors.add(door)
-        if block == "W":
-            block = Block(x, y, 2)
-            blocks.add(block)
-            all_sprites.add(block)
-        if block == "S":
-            block = Block(x, y, 3)
-            blocks.add(block)
-            all_sprites.add(block)
-
-        x += 60
-
-
-# Dodanie obiektow do tablic spritów
 
 # Glowna petla programu
+boss_fight = False
 running = True
 game_over = True
 while running:
     if game_over == True:
         show_go_screen()
         game_over = False
+        question_counter = 0
+        x = 0
+        y = 60
+        for row in level1:
+            if x == WIDTH:
+                x = 0
+                y += 60
+            for block_name in row:
+                if block_name == "B" or block_name == "F":
+                    block = Block(x, y, 1)
+                    blocks.add(block)
+                    all_sprites.add(block)
+                    if block_name != "F":
+                        inner_blocks.add(block)
+                        sand = Sand(x, y)
+                        all_sprites.add(sand)
+                if block_name == " ":
+                    sand = Sand(x, y)
+                    all_sprites.add(sand)
+                if block_name == "D" or block_name == "E":
+                    exit_door = False
+                    if block_name == "E":
+                        exit_door = True
+                    sand = Sand(x, y)
+                    all_sprites.add(sand)
+                    door = Door(x, y, players, question_counter, exit_door)
+                    question_counter += 1
+                    all_sprites.add(door)
+                    questions.add(door.question)
+                    all_sprites.add(door.question)
+                    doors.add(door)
+                if block_name == "W":
+                    block = Block(x, y, 2)
+                    blocks.add(block)
+                    all_sprites.add(block)
+                if block_name == "S":
+                    block = Block(x, y, 3)
+                    blocks.add(block)
+                    all_sprites.add(block)
+
+                x += 60
+
         player = Player(all_sprites, bullets, blocks, False)
-        boss = Boss(all_sprites, bullets, blocks, True)
         all_sprites.add(player)
-        all_sprites.add(boss)
         players.add(player)
-        SMERC = 0
+        death = False
+        win = False
+        boss_fight = False
     clock.tick(FPS)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+
+    for player in players:
+        player.can_move = not question_asked(questions)
+
+    if exit_door_opened(doors) and not boss_fight:
+        for block in inner_blocks:
+            block.kill()
+        for door in doors:
+            door.kill()
+        boss = Boss(all_sprites, bullets, blocks, True)
+        all_sprites.add(boss)
+        boss_fight = True
 
     all_sprites.update()
 
@@ -109,16 +130,32 @@ while running:
 
     pygame.display.flip()
 
-    hit_players = pygame.sprite.groupcollide(players, bullets, True, True)
-    for hit_player in hit_players:
-        death_explosion = Explosion(hit_player.rect.center, "lg", explosion_anim)
-        all_sprites.add(death_explosion)
-        if len(hit_players) > 0:
-            SMERC = SMERC + 1
 
-    if SMERC == 1 and not death_explosion.alive():
-        boss.kill()
-        game_over = True
+    if boss_fight:
+        hits_player = pygame.sprite.spritecollide(player, bullets, True)
+        for hit_player in hits_player:
+            boss.kill()
+            player.kill()
+            death_explosion = Explosion(hit_player.rect.center, "lg", explosion_anim)
+            explosion_sound.play()
+            all_sprites.add(death_explosion)
+            death = True
+
+        hits_boss = pygame.sprite.spritecollide(boss, bullets, True)
+        for hit_boss in hits_boss:
+            player.kill()
+            boss.kill()
+            death_explosion = Explosion(hit_boss.rect.center, "lg", explosion_anim)
+            explosion_sound.play()
+            all_sprites.add(death_explosion)
+            win = True
+
+        if death == 1 or death > 1 and not death_explosion.alive():
+            game_over = True
+
+        if win == 1 and not death_explosion.alive():
+            show_win_screen()
+            game_over = True
 
     hit_walls = pygame.sprite.groupcollide(bullets, blocks, True, False)
     hit_walls2 = pygame.sprite.groupcollide(bullets, doors, True, False)

@@ -1,5 +1,5 @@
 import pygame
-from statics import *
+from src.statics import *
 
 sand_img = pygame.image.load(path.join(img_dir, "sand.png"))
 sand_orig_img = pygame.transform.scale(sand_img, (60, 60))

@@ -1,5 +1,6 @@
 import pygame
-from statics import *
+
+from src.statics import *
 
 # Iniclaizowanie potrzebnych zmiennych
 font_name = pygame.font.match_font("arial")
@@ -34,11 +35,41 @@ def calculate_direction(keystate):
 
     return direction
 
+
 def show_go_screen():
     screen.blit(background, background.get_rect())
     draw_text(screen, "BAJKI ROBOTÓW", 84, WIDTH / 2, HEIGHT / 4)
-    draw_text(screen, "Press arrows key to move, Space to fire", 42, WIDTH/2, HEIGHT/2)
-    draw_text(screen, "Click any key to begin the game", 28, WIDTH/ 2, HEIGHT*3/4 )
+    draw_text(screen, "Press arrows key to move, Space to fire", 42, WIDTH / 2, HEIGHT / 2)
+    draw_text(screen, "Click any key to begin the game", 28, WIDTH / 2, HEIGHT * 3 / 4)
+    pygame.display.flip()
+    waiting = True
+    while waiting:
+        clock.tick(FPS)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+            if event.type == pygame.KEYUP:
+                waiting = False
+
+
+def exit_door_opened(doors):
+    exit_door_count = 0
+    for door in doors:
+        if door.exit_door:
+            exit_door_count += 1
+
+    return exit_door_count < 2
+
+
+def question_asked(questions):
+    for q in questions:
+        if q.initialized:
+            return True
+    return False
+
+def show_win_screen():
+    screen.blit(background, background.get_rect())
+    draw_text(screen, "YOU WIN", 84, WIDTH/2, HEIGHT/ 4)
     pygame.display.flip()
     waiting = True
     while waiting:

@@ -11,7 +11,7 @@ UP = 'UP'
 DOWN = 'DOWN'
 
 SMERC = 0
-
+WYGRANA = 0
 # COLORS
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
@@ -24,6 +24,7 @@ YELLOW = (255, 247, 0)
 img_dir = path.join(path.dirname(__file__), "../assets/img")
 snd_dir = path.join(path.dirname(__file__), "../assets/sound")
 explosions_dir = path.join(path.dirname(__file__), "../assets/img/explosions")
-robot_animation_dir = path.join(path.dirname(__file__),"../assets/img/robot" )
+robot_animation_dir = path.join(path.dirname(__file__), "../assets/img/robot")
 doors_animation_dir = path.join(path.dirname(__file__), "../assets/img/animated_door")
-boss_animation_dir = path.join(path.dirname(__file__),"../assets/img/boss" )
+boss_animation_dir = path.join(path.dirname(__file__), "../assets/img/boss")
+terminal_dir = img_dir

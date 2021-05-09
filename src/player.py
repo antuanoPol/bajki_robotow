@@ -1,16 +1,16 @@
 import pygame
 
-from bullet import Bullet
-from functions import calculate_direction
-from statics import *
-
+from src.bullet import Bullet
+from src.functions import calculate_direction
+from src.statics import *
 
 PLAYER_POSITION_X = 340
 PLAYER_POSITION_Y = HEIGHT - 240
-
+pygame.mixer.init()
 player_img = pygame.image.load(path.join(img_dir, "guardbot3.png"))
 player_orig_img = player_img = pygame.transform.scale(player_img, (50, 50))
-
+shoot_sound = pygame.mixer.Sound(path.join(snd_dir, "heat-vision.mp3"))
+shoot_sound_boss = pygame.mixer.Sound(path.join(snd_dir, "mixkit-laser-weapon-shot-1681.wav"))
 
 boss_animation = {}
 boss_animation[LEFT] = []
@@ -30,7 +30,6 @@ for direction in [LEFT, RIGHT, UP, DOWN]:
         file = pygame.image.load(path.join(robot_animation_dir, file_name))
         file = pygame.transform.scale(file, (50, 50))
         image = file
-        image.set_colorkey(BLACK)
         player_animation[direction].append(image)
 
     for i in range(8):
@@ -48,6 +47,7 @@ class Player(pygame.sprite.Sprite):
         self.if_boss = if_boss
         self.def_image = player_animation[UP][0]
         self.image = self.def_image
+        self.can_move = True
         self.image.set_colorkey(BLACK)
         self.rect = self.image.get_rect()
         self.position()
@@ -61,12 +61,15 @@ class Player(pygame.sprite.Sprite):
         self.frame = 0
         self.last_update = pygame.time.get_ticks()
         self.frame_rate = 50
+        self.points = 0
 
     def position(self):
         self.rect.centerx = PLAYER_POSITION_X
         self.rect.bottom = PLAYER_POSITION_Y
 
     def update(self):
+        if not self.can_move:
+            return
         keystate = pygame.key.get_pressed()
         self.set_direction(keystate)
         self.move()
@@ -111,7 +114,7 @@ class Player(pygame.sprite.Sprite):
             bullet = Bullet(self, self.if_boss)
             self.all_sprites.add(bullet)
             self.bullets.add(bullet)
-            # shoot_sound.play()
+            shoot_sound.play()
             self.last_shoot = now
 
     def detect_colison(self):
@@ -153,7 +156,6 @@ class Boss(Player):
         self.rect.centerx = 1440
         self.rect.bottom = 400
 
-
     def animated(self):
         now = pygame.time.get_ticks()
         if self.direction == None:
@@ -176,5 +178,5 @@ class Boss(Player):
             bullet = Bullet(self, self.if_boss)
             self.all_sprites.add(bullet)
             self.bullets.add(bullet)
-            # shoot_sound.play()
+            shoot_sound_boss.play()
             self.last_shoot = now

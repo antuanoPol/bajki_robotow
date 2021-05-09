@@ -1,6 +1,6 @@
 import pygame
-from statics import *
-from functions import rotate
+from src.statics import *
+from src.functions import rotate
 
 bullet_img = pygame.image.load(path.join(img_dir, "laserRed05.png"))
 

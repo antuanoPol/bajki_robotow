@@ -39,8 +39,8 @@ for kierunek in range(9):
     img = pygame.image.load(path.join(explosions_dir, filename)).convert()
     img.set_colorkey(BLACK)
     explosion_anim["player"].append(img)
-    #player_mini_img = pygame.transform.scale(, (25, 19))
-    #player_mini_img.set_colorkey(BLACK)
+    # player_mini_img = pygame.transform.scale(player_img, (25, 19))
+    # player_mini_img.set_colorkey(BLACK)
 # Właczenie mixera
 pygame.mixer.music.play(loops=-1)
 
@@ -146,41 +146,38 @@ while running:
     pygame.display.flip()
 
     if boss_fight:
-       # draw_lives(screen, WIDTH - 100, 5, player.lives_player, player_mini_img)
+        # draw_lives(screen, WIDTH - 100, 5, player.lives_player, player_mini_img)
         pygame.display.flip()
-        #draw_lives(screen, WIDTH - 100, 5, boss.lives_boss, boss_mini_img)
+        # draw_lives(screen, WIDTH - 100, 5, boss.lives_boss, boss_mini_img)
         hits_player = pygame.sprite.spritecollide(player, bullets, True)
         for hit_player in hits_player:
             player.lives_player = player.lives_player - 1
             explosion_sound.play()
-            death_explosion = Explosion(hit_player.rect.center, "player", explosion_anim)
-            all_sprites.add(death_explosion)
-            boss.hide()
-            player.hide()
-            death = True
-            #screen.blit()
+            if player.lives_player == 0 or player.lives_player < 0:
+                player.kill()
+                boss.kill()
+                death_explosion = Explosion(player.rect.center, "player", explosion_anim)
+                all_sprites.add(death_explosion)
+                death = True
 
         hits_boss = pygame.sprite.spritecollide(boss, bullets, True)
         for hit_boss in hits_boss:
-            boss.lives_player = boss.lives_boss - 1
+            boss.lives_boss = boss.lives_boss - 1
             explosion_sound.play()
-            death_explosion = Explosion(hit_boss.rect.center, "lg", explosion_anim)
-            all_sprites.add(death_explosion)
-            player.hide()
-            boss.hide()
-            win = True
-
-        if death and not death_explosion.alive():
-            if player.lives_player == 0:
-                player.kill()
+            if boss.lives_boss == 0 or boss.lives_boss < 0:
                 boss.kill()
+                player.kill()
+                death_explosion_boss = Explosion(boss.rect.center, "lg", explosion_anim)
+                all_sprites.add(death_explosion_boss)
+                win = True
+
+        if death:
+            if not death_explosion.alive():
                 show_die_screen()
                 game_over = True
 
-        if win and not death_explosion.alive():
-            if boss.lives_boss == 0:
-                player.kill()
-                boss.kill()
+        if win:
+            if not death_explosion_boss.alive():
                 show_win_screen()
                 game_over = True
 

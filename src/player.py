@@ -65,19 +65,12 @@ class Player(pygame.sprite.Sprite):
         self.last_update = pygame.time.get_ticks()
         self.frame_rate = 50
         self.lives_player = 1
-        self.hidden = False
-        self.hide_timer = pygame.time.get_ticks()
 
     def position(self):
         self.rect.centerx = PLAYER_POSITION_X
         self.rect.bottom = PLAYER_POSITION_Y
 
     def update(self):
-        #unhide
-        if self.hidden and pygame.time.get_ticks() - self.hide_timer > 1000:
-            self.hidden = False
-            self.rect.centerx = 340
-            self.rect.bottom = HEIGHT - 240
         if not self.can_move:
             return
         keystate = pygame.key.get_pressed()
@@ -150,10 +143,6 @@ class Player(pygame.sprite.Sprite):
             self.rect = self.image.get_rect()
             self.rect.center = center
 
-    def hide(self):
-        self.hidden = True
-        self.hide_timer = pygame.time.get_ticks()
-        self.rect.center = (WIDTH / 2, HEIGHT + 200)
 
 
 class Boss(Player):
@@ -280,10 +269,6 @@ class Boss(Player):
             shoot_sound_boss.play()
             self.last_shoot = now
     def update(self):
-        if self.hidden and pygame.time.get_ticks() - self.hide_timer > 1000:
-            self.hidden = False
-            self.rect.centerx = 1440
-            self.rect.bottom = 400
         if not self.can_move:
             return
         keystate = pygame.key.get_pressed()

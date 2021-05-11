@@ -64,13 +64,20 @@ class Player(pygame.sprite.Sprite):
         self.frame = 0
         self.last_update = pygame.time.get_ticks()
         self.frame_rate = 50
-        self.points = 0
+        self.lives_player = 1
+        self.hidden = False
+        self.hide_timer = pygame.time.get_ticks()
 
     def position(self):
         self.rect.centerx = PLAYER_POSITION_X
         self.rect.bottom = PLAYER_POSITION_Y
 
     def update(self):
+        #unhide
+        if self.hidden and pygame.time.get_ticks() - self.hide_timer > 1000:
+            self.hidden = False
+            self.rect.centerx = 340
+            self.rect.bottom = HEIGHT - 240
         if not self.can_move:
             return
         keystate = pygame.key.get_pressed()
@@ -105,14 +112,6 @@ class Player(pygame.sprite.Sprite):
 
         self.rect.y += self.speedy
         self.rect.x += self.speedx
-        if self.rect.right > WIDTH:
-            self.rect.right = WIDTH
-        if self.rect.left < 0:
-            self.rect.left = 0
-        if self.rect.bottom > HEIGHT:
-            self.rect.bottom = HEIGHT
-        if self.rect.top <= 0:
-            self.rect.top = 0
 
     def shoot(self):
         now = pygame.time.get_ticks()
@@ -151,14 +150,39 @@ class Player(pygame.sprite.Sprite):
             self.rect = self.image.get_rect()
             self.rect.center = center
 
+    def hide(self):
+        self.hidden = True
+        self.hide_timer = pygame.time.get_ticks()
+        self.rect.center = (WIDTH / 2, HEIGHT + 200)
+
 
 class Boss(Player):
     def __init__(self, all_sprites, bullets, blocks, if_boss, player=None):
         super().__init__(all_sprites, bullets, blocks, if_boss)
+        self.shoot_delay = 200
         self.def_image = boss_animation[UP][0]
         self.if_boss = if_boss
         self.player = player
         self.last_update_random_pos = pygame.time.get_ticks()
+        self.last_shoot_bullet = pygame.time.get_ticks()
+        self.lives_boss = 3
+
+    def move(self):
+        self.speedx = 0
+        self.speedy = 0
+        if self.direction == LEFT:
+            self.speedx = -12
+        if self.direction == RIGHT:
+            self.speedx = 12
+        if self.direction == UP:
+            self.speedy = -12
+        if self.direction == DOWN:
+            self.speedy = 12
+        self.animated()
+
+        self.rect.y += self.speedy
+        self.rect.x += self.speedx
+
 
     def position(self):
         self.rect.centerx = 1440
@@ -167,7 +191,6 @@ class Boss(Player):
     def set_direction(self, keystate):
         dist = sqrt(
             (self.player.rect.centerx - self.rect.centerx) ** 2 + (self.player.rect.centery - self.rect.centery) ** 2)
-        print(dist)
         now = pygame.time.get_ticks()
         collision_possible = False
         if dist > 300:
@@ -175,14 +198,33 @@ class Boss(Player):
                 collision_possible = True
                 if self.rect.centerx > self.player.rect.centerx:
                     self.direction = LEFT
+                    self.shoot()
+                    self.last_shoot_bullet = now
                 else:
                     self.direction = RIGHT
-            elif abs(self.rect.centerx - self.player.rect.centerx) < 30:
-                collision_possible = True
-                if self.rect.centery > self.player.rect.centery:
-                    self.direction = UP
-                else:
-                    self.direction = DOWN
+                    self.shoot()
+                    self.last_shoot_bullet = now
+            # elif abs(self.rect.centerx - self.player.rect.centerx) < 30:
+            #     collision_possible = True
+            #     if self.rect.centery > self.player.rect.centery:
+            #         self.direction = UP
+            if dist > 200:
+                if abs(self.rect.centerx - self.player.rect.centerx) < 30:
+                    collision_possible = True
+                    if self.rect.centery > self.player.rect.centery:
+                        self.direction = UP
+                        self.shoot()
+                        self.last_shoot_bullet = now
+                    else:
+                        self.direction = DOWN
+                        self.shoot()
+                        self.last_shoot_bullet = now
+                # elif abs(self.rect.centery - self.player.rect.centery) < 30:
+                #     collision_possible = True
+                #     if self.rect.centery > self.player.rect.centery:
+                #         self.direction = UP
+                #     else:
+                #         self.direction = DOWN
 
         if collision_possible:
             self.last_update_random_pos = now
@@ -237,3 +279,16 @@ class Boss(Player):
             self.bullets.add(bullet)
             shoot_sound_boss.play()
             self.last_shoot = now
+    def update(self):
+        if self.hidden and pygame.time.get_ticks() - self.hide_timer > 1000:
+            self.hidden = False
+            self.rect.centerx = 1440
+            self.rect.bottom = 400
+        if not self.can_move:
+            return
+        keystate = pygame.key.get_pressed()
+        self.set_direction(keystate)
+        self.move()
+        self.detect_colison()
+        self.reset_direction()
+

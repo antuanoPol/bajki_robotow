@@ -9,12 +9,16 @@ class Bullet(pygame.sprite.Sprite):
     def __init__(self, parent, boss):
         pygame.sprite.Sprite.__init__(self)
         self.image = bullet_img.convert()
+        if boss:
+            self.image = pygame.transform.scale(bullet_img, (20, 40))
         self.image.set_colorkey(BLACK)
         self.rect = self.image.get_rect()
         self.rect.bottom = parent.rect.centery
         self.rect.centerx = parent.rect.centerx
         self.speed = 25
-        self.direction = parent.bullet_direction
+        self.direction = parent.direction
+        if parent.direction == None:
+            self.direction = UP
         if self.direction == LEFT or self.direction == RIGHT:
             self.image = rotate(90, self.image)
             self.image.set_colorkey(BLACK)

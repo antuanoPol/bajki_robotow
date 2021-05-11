@@ -26,6 +26,7 @@ explosion_sound = pygame.mixer.Sound(path.join(snd_dir, "explosion.wav"))
 explosion_anim = {}
 explosion_anim["lg"] = []
 explosion_anim["sm"] = []
+explosion_anim["player"] = []
 for kierunek in range(9):
     filename = "regularExplosion0{}.png".format(kierunek)
     img = pygame.image.load(path.join(explosions_dir, filename)).convert()
@@ -34,7 +35,12 @@ for kierunek in range(9):
     explosion_anim["lg"].append(img_lg)
     img_sm = pygame.transform.scale(img, (32, 32))
     explosion_anim["sm"].append(img_sm)
-
+    filename = "sonicExplosion0{}.png".format(kierunek)
+    img = pygame.image.load(path.join(explosions_dir, filename)).convert()
+    img.set_colorkey(BLACK)
+    explosion_anim["player"].append(img)
+    #player_mini_img = pygame.transform.scale(, (25, 19))
+    #player_mini_img.set_colorkey(BLACK)
 # Właczenie mixera
 pygame.mixer.music.play(loops=-1)
 
@@ -48,14 +54,12 @@ doors = pygame.sprite.LayeredUpdates()
 sands = pygame.sprite.LayeredUpdates()
 questions = pygame.sprite.LayeredUpdates()
 
-
-
 # Glowna petla programu
 boss_fight = False
 running = True
 game_over = True
 while running:
-    if game_over == True:
+    if game_over:
         show_go_screen()
         game_over = False
         question_counter = 0
@@ -106,7 +110,9 @@ while running:
         death = False
         win = False
         boss_fight = False
+
     clock.tick(FPS)
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
@@ -114,14 +120,14 @@ while running:
     for player in players:
         player.can_move = not question_asked(questions)
 
-    # if exit_door_opened(doors) and not boss_fight:
-    #     for block in inner_blocks:
-    #         block.kill()
-    #     for door in doors:
-    #         door.kill()
-    #     boss = Boss(all_sprites, bullets, blocks, True)
-    #     all_sprites.add(boss)
-    #     boss_fight = True
+    if exit_door_opened(doors) and not boss_fight:
+        for block in inner_blocks:
+            block.kill()
+        for door in doors:
+            door.kill()
+        boss = Boss(all_sprites, bullets, blocks, True, player)
+        all_sprites.add(boss)
+        boss_fight = True
 
     if not boss_fight:
         for block in inner_blocks:
@@ -139,32 +145,44 @@ while running:
 
     pygame.display.flip()
 
-
     if boss_fight:
+       # draw_lives(screen, WIDTH - 100, 5, player.lives_player, player_mini_img)
+        pygame.display.flip()
+        #draw_lives(screen, WIDTH - 100, 5, boss.lives_boss, boss_mini_img)
         hits_player = pygame.sprite.spritecollide(player, bullets, True)
         for hit_player in hits_player:
-            boss.kill()
-            player.kill()
-            death_explosion = Explosion(hit_player.rect.center, "lg", explosion_anim)
+            player.lives_player = player.lives_player - 1
             explosion_sound.play()
+            death_explosion = Explosion(hit_player.rect.center, "player", explosion_anim)
             all_sprites.add(death_explosion)
+            boss.hide()
+            player.hide()
             death = True
+            #screen.blit()
 
         hits_boss = pygame.sprite.spritecollide(boss, bullets, True)
         for hit_boss in hits_boss:
-            player.kill()
-            boss.kill()
-            death_explosion = Explosion(hit_boss.rect.center, "lg", explosion_anim)
+            boss.lives_player = boss.lives_boss - 1
             explosion_sound.play()
+            death_explosion = Explosion(hit_boss.rect.center, "lg", explosion_anim)
             all_sprites.add(death_explosion)
+            player.hide()
+            boss.hide()
             win = True
 
-        if death == 1 or death > 1 and not death_explosion.alive():
-            game_over = True
+        if death and not death_explosion.alive():
+            if player.lives_player == 0:
+                player.kill()
+                boss.kill()
+                show_die_screen()
+                game_over = True
 
-        if win == 1 and not death_explosion.alive():
-            show_win_screen()
-            game_over = True
+        if win and not death_explosion.alive():
+            if boss.lives_boss == 0:
+                player.kill()
+                boss.kill()
+                show_win_screen()
+                game_over = True
 
     hit_walls = pygame.sprite.groupcollide(bullets, blocks, True, False)
     hit_walls2 = pygame.sprite.groupcollide(bullets, doors, True, False)

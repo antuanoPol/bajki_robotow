@@ -46,7 +46,7 @@ class Door(pygame.sprite.Sprite):
             self.frame += 1
             if self.frame == len(doors_animation):
                 self.question.kill()
-                self.hit_with_player.points += self.question.answer_points
+                self.hit_with_player.lives_player += self.question.answer_points
                 self.kill()
             else:
                 center = self.rect.center

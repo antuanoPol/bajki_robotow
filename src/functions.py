@@ -79,3 +79,23 @@ def show_win_screen():
                 pygame.quit()
             if event.type == pygame.KEYUP:
                 waiting = False
+
+def show_die_screen():
+    screen.blit(background, background.get_rect())
+    draw_text(screen, "YOU LOSE", 84, WIDTH/2, HEIGHT/ 4)
+    pygame.display.flip()
+    waiting = True
+    while waiting:
+        clock.tick(FPS)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+            if event.type == pygame.KEYUP:
+                waiting = False
+
+def draw_lives(surf, x, y, lives, img):
+    for i in range(lives):
+        img_rect = img.get_rect()
+        img_rect.x = x + 30*i
+        img_rect.y = y
+        surf.blit(img, img_rect)

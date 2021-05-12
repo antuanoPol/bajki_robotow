@@ -10,8 +10,6 @@ from src.statics import *
 PLAYER_POSITION_X = 340
 PLAYER_POSITION_Y = HEIGHT - 240
 pygame.mixer.init()
-player_img = pygame.image.load(path.join(img_dir, "guardbot3.png"))
-player_orig_img = player_img = pygame.transform.scale(player_img, (50, 50))
 shoot_sound = pygame.mixer.Sound(path.join(snd_dir, "heat-vision.mp3"))
 shoot_sound_boss = pygame.mixer.Sound(path.join(snd_dir, "mixkit-laser-weapon-shot-1681.wav"))
 

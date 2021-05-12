@@ -39,8 +39,8 @@ def calculate_direction(keystate):
 def show_go_screen():
     screen.blit(background, background.get_rect())
     draw_text(screen, "BAJKI ROBOTÓW", 84, WIDTH / 2, HEIGHT / 4)
-    draw_text(screen, "Press arrows key to move, Space to fire", 42, WIDTH / 2, HEIGHT / 2)
-    draw_text(screen, "Click any key to begin the game", 28, WIDTH / 2, HEIGHT * 3 / 4)
+    draw_text(screen, "Strzałki wskazują kierunek, Spacja to strzał", 42, WIDTH / 2, HEIGHT / 2)
+    draw_text(screen, "Naciśnij dowolny klawisz żeby zacząć grę", 28, WIDTH / 2, HEIGHT * 3 / 4)
     pygame.display.flip()
     waiting = True
     while waiting:
@@ -67,9 +67,10 @@ def question_asked(questions):
             return True
     return False
 
+
 def show_win_screen():
     screen.blit(background, background.get_rect())
-    draw_text(screen, "YOU WIN", 84, WIDTH/2, HEIGHT/ 4)
+    draw_text(screen, "WYGRAŁEŚ", 84, WIDTH / 2, HEIGHT / 4)
     pygame.display.flip()
     waiting = True
     while waiting:
@@ -80,9 +81,10 @@ def show_win_screen():
             if event.type == pygame.KEYUP:
                 waiting = False
 
+
 def show_die_screen():
     screen.blit(background, background.get_rect())
-    draw_text(screen, "YOU LOSE", 84, WIDTH/2, HEIGHT/ 4)
+    draw_text(screen, "PRZEGRAŁEŚ", 84, WIDTH / 2, HEIGHT / 4)
     pygame.display.flip()
     waiting = True
     while waiting:
@@ -92,10 +94,11 @@ def show_die_screen():
                 pygame.quit()
             if event.type == pygame.KEYUP:
                 waiting = False
+
 
 def draw_lives(surf, x, y, lives, img):
     for i in range(lives):
         img_rect = img.get_rect()
-        img_rect.x = x + 30*i
+        img_rect.x = x + 30 * i
         img_rect.y = y
         surf.blit(img, img_rect)

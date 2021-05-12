@@ -14,6 +14,24 @@ screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Bajki robotow")
 clock = pygame.time.Clock()
 
+player_mini_image = None
+boss_mini_image = None
+
+
+def get_player_mini_image(image):
+    global player_mini_image
+    if player_mini_image is None:
+        player_mini_image = pygame.transform.scale(image, (40, 40))
+    return player_mini_image
+
+
+def get_boss_mini_image(image):
+    global boss_mini_image
+    if boss_mini_image is None:
+        boss_mini_image = pygame.transform.scale(image, (40, 40))
+    return boss_mini_image
+
+
 # Inicjalizowanie grafiki
 background = pygame.image.load(path.join(img_dir, "background-scifi.png")).convert()
 
@@ -39,8 +57,7 @@ for kierunek in range(9):
     img = pygame.image.load(path.join(explosions_dir, filename)).convert()
     img.set_colorkey(BLACK)
     explosion_anim["player"].append(img)
-    # player_mini_img = pygame.transform.scale(player_img, (25, 19))
-    # player_mini_img.set_colorkey(BLACK)
+
 # Właczenie mixera
 pygame.mixer.music.play(loops=-1)
 
@@ -144,12 +161,9 @@ while running:
     screen.fill(BLACK)
     all_sprites.draw(screen)
 
-    pygame.display.flip()
-
     if boss_fight:
-        # draw_lives(screen, WIDTH - 100, 5, player.lives_player, player_mini_img)
-        pygame.display.flip()
-        # draw_lives(screen, WIDTH - 100, 5, boss.lives_boss, boss_mini_img)
+        draw_lives(screen, 80, 80, player.lives_player, get_player_mini_image(player.def_image))
+        draw_lives(screen, 1630, 80, boss.lives_boss, get_boss_mini_image(boss.def_image))
         hits_player = pygame.sprite.spritecollide(player, bullets, True)
         for hit_player in hits_player:
             player.lives_player = player.lives_player - 1
@@ -180,8 +194,7 @@ while running:
             explosion_sound.play()
             death_explosion_player_hit = Explosion(player.rect.center, "player", explosion_anim)
             all_sprites.add(death_explosion_player_hit)
-            colission =True
-
+            colission = True
 
         if death:
             if not death_explosion.alive():
@@ -193,11 +206,12 @@ while running:
                 show_win_screen()
                 game_over = True
 
-
-        if colission :
+        if colission:
             if not death_explosion_player_hit.alive():
                 show_die_screen()
                 game_over = True
+
+    pygame.display.flip()
     hit_walls = pygame.sprite.groupcollide(bullets, blocks, True, False)
     hit_walls2 = pygame.sprite.groupcollide(bullets, doors, True, False)
 pygame.quit()

@@ -31,7 +31,7 @@ for kierunek in range(9):
     filename = "regularExplosion0{}.png".format(kierunek)
     img = pygame.image.load(path.join(explosions_dir, filename)).convert()
     img.set_colorkey(BLACK)
-    img_lg = pygame.transform.scale(img, (75, 75))
+    img_lg = pygame.transform.scale(img, (120, 120))
     explosion_anim["lg"].append(img_lg)
     img_sm = pygame.transform.scale(img, (32, 32))
     explosion_anim["sm"].append(img_sm)
@@ -109,6 +109,7 @@ while running:
         players.add(player)
         death = False
         win = False
+        colission = False
         boss_fight = False
 
     clock.tick(FPS)
@@ -171,6 +172,17 @@ while running:
                 all_sprites.add(death_explosion_boss)
                 win = True
 
+        hits_boss_player = pygame.sprite.spritecollide(boss, players, False)
+        for hit_boss_player in hits_boss_player:
+            player.lives_player = 0
+            boss.kill()
+            player.kill()
+            explosion_sound.play()
+            death_explosion_player_hit = Explosion(player.rect.center, "player", explosion_anim)
+            all_sprites.add(death_explosion_player_hit)
+            colission =True
+
+
         if death:
             if not death_explosion.alive():
                 show_die_screen()
@@ -181,7 +193,12 @@ while running:
                 show_win_screen()
                 game_over = True
 
+
+        if colission :
+            if not death_explosion_player_hit.alive():
+                show_die_screen()
+                game_over = True
+
     hit_walls = pygame.sprite.groupcollide(bullets, blocks, True, False)
     hit_walls2 = pygame.sprite.groupcollide(bullets, doors, True, False)
-
 pygame.quit()

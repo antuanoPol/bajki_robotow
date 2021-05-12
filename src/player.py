@@ -94,13 +94,13 @@ class Player(pygame.sprite.Sprite):
         self.speedx = 0
         self.speedy = 0
         if self.direction == LEFT:
-            self.speedx = -6
+            self.speedx = -9
         if self.direction == RIGHT:
-            self.speedx = 6
+            self.speedx = 9
         if self.direction == UP:
-            self.speedy = -6
+            self.speedy = -9
         if self.direction == DOWN:
-            self.speedy = 6
+            self.speedy = 9
         self.animated()
 
         self.rect.y += self.speedy
@@ -160,13 +160,13 @@ class Boss(Player):
         self.speedx = 0
         self.speedy = 0
         if self.direction == LEFT:
-            self.speedx = -12
+            self.speedx = -6
         if self.direction == RIGHT:
-            self.speedx = 12
+            self.speedx = 6
         if self.direction == UP:
-            self.speedy = -12
+            self.speedy = -6
         if self.direction == DOWN:
-            self.speedy = 12
+            self.speedy = 6
         self.animated()
 
         self.rect.y += self.speedy
@@ -174,8 +174,8 @@ class Boss(Player):
 
 
     def position(self):
-        self.rect.centerx = 1440
-        self.rect.bottom = 400
+        self.rect.centerx = 340
+        self.rect.bottom = HEIGHT - 240
 
     def set_direction(self, keystate):
         dist = sqrt(

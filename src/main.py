@@ -130,14 +130,14 @@ while running:
         all_sprites.add(boss)
         boss_fight = True
 
-    if not boss_fight:
-        for block in inner_blocks:
-            block.kill()
-        for door in doors:
-            door.kill()
-        boss = Boss(all_sprites, bullets, blocks, True, player)
-        all_sprites.add(boss)
-        boss_fight = True
+    # if not boss_fight:
+    #     for block in inner_blocks:
+    #         block.kill()
+    #     for door in doors:
+    #         door.kill()
+    #     boss = Boss(all_sprites, bullets, blocks, True, player)
+    #     all_sprites.add(boss)
+    #     boss_fight = True
 
     all_sprites.update()
 
@@ -198,7 +198,6 @@ while running:
             if not death_explosion_player_hit.alive():
                 show_die_screen()
                 game_over = True
-
     hit_walls = pygame.sprite.groupcollide(bullets, blocks, True, False)
     hit_walls2 = pygame.sprite.groupcollide(bullets, doors, True, False)
 pygame.quit()

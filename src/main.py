@@ -5,8 +5,8 @@ from src.functions import *
 from src.levels import *
 from src.player import Boss
 from src.player import Player
-from src.sand import Sand
 from src.pre_fight import PreFight
+from src.sand import Sand
 
 # iniclaizacja gry i utworzenie okna
 pygame.init()  # inicjalizuje cała bibliotekę
@@ -38,7 +38,6 @@ background = pygame.image.load(path.join(img_dir, "background-scifi.png")).conve
 red_cross_img = pygame.image.load(path.join(img_dir, "red_cross.png")).convert()
 red_cross_convert_img = pygame.transform.scale(red_cross_img, (60, 60))
 red_cross_convert_img.set_colorkey(BLACK)
-
 
 # Dodawanie muzyki
 pygame.mixer.music.load(path.join(snd_dir, "CleytonRX - Battle RPG Theme Var.ogg"))
@@ -143,13 +142,14 @@ while running:
             running = False
 
     for player in players:
-        player.can_move = not question_asked(questions)
+        player.can_move = not question_asked(questions) and (not boss_info.initialized or boss_info.closed)
 
     if exit_door_opened(doors) and not boss_info.initialized:
         boss_info.initialized = True
 
     if exit_door_opened(doors) and not boss_fight and boss_info.closed:
         boss_info.kill()
+        boss_info.initialized = False
         for block in inner_blocks:
             block.kill()
         for door in doors:

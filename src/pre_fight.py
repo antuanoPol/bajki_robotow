@@ -39,12 +39,14 @@ class PreFight(pygame.sprite.Sprite):
         self.check_key()
 
     def draw_info(self):
-        self.image.blit(self.font.render("Mały nędzny Robociku. Wykazałeś się wiedzą, ale...", 1, WHITE), [50, 100])
+        self.image.blit(self.font.render("Mały, nędzny Robociku! ", 1, WHITE), [50, 100])
+        self.image.blit(self.font.render("Wykazałeś się wiedzą, ale...", 1, WHITE), [50, 130])
+
         self.image.blit(self.font.render("wiedza to nie wszystko, czasem w bezmiarze przestrzeni liczy", 1, WHITE),
-                        [50, 130])
-        self.image.blit(self.font.render("się tylko brutalna siła!", 1, WHITE), [50, 160])
-        self.image.blit(self.font.render("Zobaczymy na co Cię stać!", 1, WHITE), [50, 190])
-        self.image.blit(self.font.render("Gotowy?  [ENTER]", 1, WHITE), [50, 300])
+                        [50, 160])
+        self.image.blit(self.font.render("się tylko brutalna siła!", 1, WHITE), [50, 190])
+        self.image.blit(self.font.render("Zobaczymy na co Cię stać!", 1, WHITE), [50, 220])
+        self.image.blit(self.font.render("Gotowy?  [ENTER]", 1, WHITE), [50, 330])
 
     def check_key(self):
         keystate = pygame.key.get_pressed()

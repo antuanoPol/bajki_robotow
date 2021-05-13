@@ -158,12 +158,15 @@ while running:
         for hit_player in hits_player:
             player.lives_player = player.lives_player - 1
             explosion_sound.play()
-            death_explosion = Explosion(player.rect.center, "player", explosion_anim)
-            all_sprites.add(death_explosion)
             if player.lives_player == 0 or player.lives_player < 0:
+                death_explosion = Explosion(player.rect.center, "player", explosion_anim)
+                all_sprites.add(death_explosion)
                 player.kill()
                 boss.kill()
                 death = True
+            else:
+                death_explosion_sm = Explosion(player.rect.center, "sm", explosion_anim)
+                all_sprites.add(death_explosion_sm)
 
         hits_boss = pygame.sprite.spritecollide(boss, bullets, True)
         for hit_boss in hits_boss:

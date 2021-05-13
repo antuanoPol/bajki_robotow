@@ -55,37 +55,31 @@ question_data_6['ANSWER'] = 3
 
 
 question_data_7 = {}
-question_data_7['TEXT'] = ["Jak nazywał się elektroniczny przyjaciel Automateusza? (Naciśnij 1, 2 lub 3)",
-                           "1. Wok",
-                           "2. Nie miał imienia wszyscy nazywali go komputerkiem",
-                           "3. Wuch"
+question_data_7['TEXT'] = ["Kto wszczął ucieczkę mgławic? (Naciśnij 1, 2 lub 3)",
+                           "1. Mikromił i Gigancyn",
+                           "2. Astronomowie",
+                           "3. Nikt tego nie wie"
                            ]
-question_data_7['ANSWER'] = 3
+question_data_7['ANSWER'] = 1
 
 question_data_8 = {}
-question_data_8['TEXT'] = ["Jak nazywał się elektroniczny przyjaciel Automateusza? (Naciśnij 1, 2 lub 3)",
-                           "1. Wok",
-                           "2. Nie miał imienia wszyscy nazywali go komputerkiem",
-                           "3. Wuch"
+question_data_8['TEXT'] = ["Ile planet utworzył uczeń Kosmogonika? (Naciśnij 1, 2 lub 3)",
+                           "1. Pięć",
+                           "2. Dziewięć",
+                           "3. Trzy"
                            ]
 question_data_8['ANSWER'] = 3
 
 question_data_9 = {}
-question_data_9['TEXT'] = ["Jak nazywał się elektroniczny przyjaciel Automateusza? (Naciśnij 1, 2 lub 3)",
-                           "1. Wok",
-                           "2. Nie miał imienia wszyscy nazywali go komputerkiem",
-                           "3. Wuch"
+question_data_9['TEXT'] = ["Jak miał na imię król który kolekcjonował zegary? (Naciśnij 1, 2 lub 3)",
+                           "1. Boludar",
+                           "2. Homos",
+                           "3. Erg"
                            ]
-question_data_9['ANSWER'] = 3
+question_data_9['ANSWER'] = 1
 
 
-question_data_10 = {}
-question_data_10['TEXT'] = ["Jak nazywał się elektroniczny przyjaciel Automateusza? (Naciśnij 1, 2 lub 3)",
-                           "1. Wok",
-                           "2. Nie miał imienia wszyscy nazywali go komputerkiem",
-                           "3. Wuch"
-                           ]
-question_data_10['ANSWER'] = 3
+
 
 questions_datas.append(question_data_1)
 questions_datas.append(question_data_2)
@@ -96,8 +90,6 @@ questions_datas.append(question_data_6)
 questions_datas.append(question_data_7)
 questions_datas.append(question_data_8)
 questions_datas.append(question_data_9)
-questions_datas.append(question_data_10)
-
 
 class Question(pygame.sprite.Sprite):
     def __init__(self, question_data):

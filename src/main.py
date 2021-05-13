@@ -146,16 +146,6 @@ while running:
         boss = Boss(all_sprites, bullets, blocks, True, player)
         all_sprites.add(boss)
         boss_fight = True
-
-    # if not boss_fight:
-    #     for block in inner_blocks:
-    #         block.kill()
-    #     for door in doors:
-    #         door.kill()
-    #     boss = Boss(all_sprites, bullets, blocks, True, player)
-    #     all_sprites.add(boss)
-    #     boss_fight = True
-
     all_sprites.update()
 
     screen.fill(BLACK)
@@ -179,12 +169,14 @@ while running:
         for hit_boss in hits_boss:
             boss.lives_boss = boss.lives_boss - 1
             explosion_sound.play()
-            death_explosion_boss = Explosion(boss.rect.center, "lg", explosion_anim)
-            all_sprites.add(death_explosion_boss)
-        if boss.lives_boss == 0 or boss.lives_boss < 0:
+            if boss.lives_boss == 0 or boss.lives_boss < 0:
+                death_explosion_boss = Explosion(boss.rect.center, "lg", explosion_anim)
                 boss.kill()
                 player.kill()
                 win = True
+            else:
+                death_explosion_boss = Explosion(boss.rect.center, "sm", explosion_anim)
+            all_sprites.add(death_explosion_boss)
 
         hits_boss_player = pygame.sprite.spritecollide(boss, players, False)
         for hit_boss_player in hits_boss_player:

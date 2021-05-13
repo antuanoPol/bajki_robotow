@@ -169,38 +169,26 @@ class Boss(Player):
             (self.player.rect.centerx - self.rect.centerx) ** 2 + (self.player.rect.centery - self.rect.centery) ** 2)
         now = pygame.time.get_ticks()
         collision_possible = False
-        if dist > 200:
-            if abs(self.rect.centery - self.player.rect.centery) < 30:
-                collision_possible = True
-                if self.rect.centerx > self.player.rect.centerx:
-                    self.direction = LEFT
-                    self.shoot()
-                    self.last_shoot_bullet = now
-                else:
-                    self.direction = RIGHT
-                    self.shoot()
-                    self.last_shoot_bullet = now
-            elif abs(self.rect.centerx - self.player.rect.centerx) < 30:
-                collision_possible = True
-                if self.rect.centery > self.player.rect.centery:
-                    self.direction = UP
-
-            if abs(self.rect.centerx - self.player.rect.centerx) < 30:
-                collision_possible = True
-                if self.rect.centery > self.player.rect.centery:
-                    self.direction = UP
-                    self.shoot()
-                    self.last_shoot_bullet = now
-                else:
-                    self.direction = DOWN
-                    self.shoot()
-                    self.last_shoot_bullet = now
-            elif abs(self.rect.centery - self.player.rect.centery) < 30:
-                collision_possible = True
-                if self.rect.centery > self.player.rect.centery:
-                    self.direction = UP
-                else:
-                    self.direction = DOWN
+        if abs(self.rect.centery - self.player.rect.centery) < 30 and dist > 300:
+            collision_possible = True
+            if self.rect.centerx > self.player.rect.centerx:
+                self.direction = LEFT
+                self.shoot()
+                self.last_shoot_bullet = now
+            else:
+                self.direction = RIGHT
+                self.shoot()
+                self.last_shoot_bullet = now
+        if abs(self.rect.centerx - self.player.rect.centerx) < 30 and dist > 200:
+            collision_possible = True
+            if self.rect.centery > self.player.rect.centery:
+                self.direction = UP
+                self.shoot()
+                self.last_shoot_bullet = now
+            else:
+                self.direction = DOWN
+                self.shoot()
+                self.last_shoot_bullet = now
 
         if collision_possible:
             self.last_update_random_pos = now

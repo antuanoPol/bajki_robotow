@@ -25,14 +25,8 @@ class Bullet(pygame.sprite.Sprite):
             self.rect = self.image.get_rect()
             self.rect.centerx = parent.rect.centerx
             self.rect.bottom = parent.rect.centery
-        if boss == True:
-            if self.direction == UP:
-                self.rect.centerx = parent.rect.centerx - 20
         if self.direction == UP:
             self.rect.bottom = parent.rect.top - 20
-        if boss == True:
-            if self.direction == DOWN:
-                self.rect.centerx += 20
         if self.direction == DOWN:
             self.rect.bottom = parent.rect.bottom + 60
         if self.direction == RIGHT:

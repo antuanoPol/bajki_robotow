@@ -6,7 +6,10 @@ from src.statics import *
 font_name = pygame.font.match_font("arial")
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 clock = pygame.time.Clock()
-background = pygame.image.load(path.join(img_dir, "background-scifi.png")).convert()
+background_img = pygame.image.load(path.join(img_dir, "background-scifi.png")).convert()
+keyboard = pygame.image.load(path.join(img_dir, "keyboard.png")).convert()
+keyboard_img = pygame.transform.scale(keyboard, (360, 260))
+keyboard_img.set_colorkey(BLACK)
 
 
 def rotate(rot, image):
@@ -37,10 +40,11 @@ def calculate_direction(keystate):
 
 
 def show_go_screen():
-    screen.blit(background, background.get_rect())
+    screen.blit(background_img, background_img.get_rect())
     draw_text(screen, "BAJKI ROBOTÓW", 84, WIDTH / 2, HEIGHT / 4)
-    draw_text(screen, "Strzałki wskazują kierunek, Spacja to strzał", 42, WIDTH / 2, HEIGHT / 2)
+    draw_text(screen, "Strzałki sterują robotem a spacja to atak", 42, WIDTH / 2, HEIGHT / 2)
     draw_text(screen, "Naciśnij dowolny klawisz żeby zacząć grę", 28, WIDTH / 2, HEIGHT * 3 / 4)
+    draw_keyboard(screen, (WIDTH / 2) - keyboard_img.get_rect().width / 2, HEIGHT / 2 , keyboard_img)
     pygame.display.flip()
     waiting = True
     while waiting:
@@ -69,7 +73,7 @@ def question_asked(questions):
 
 
 def show_win_screen():
-    screen.blit(background, background.get_rect())
+    screen.blit(background_img, background_img.get_rect())
     draw_text(screen, "WYGRAŁEŚ", 84, WIDTH / 2, HEIGHT / 4)
     pygame.display.flip()
     waiting = True
@@ -83,7 +87,7 @@ def show_win_screen():
 
 
 def show_die_screen():
-    screen.blit(background, background.get_rect())
+    screen.blit(background_img, background_img.get_rect())
     draw_text(screen, "PRZEGRAŁEŚ", 84, WIDTH / 2, HEIGHT / 4)
     pygame.display.flip()
     waiting = True
@@ -102,3 +106,10 @@ def draw_lives(surf, x, y, lives, img):
         img_rect.x = x + 30 * i
         img_rect.y = y
         surf.blit(img, img_rect)
+
+
+def draw_keyboard(surf, x, y, img):
+    img_rect = img.get_rect()
+    img_rect.x = x
+    img_rect.y = y
+    surf.blit(img, img_rect)

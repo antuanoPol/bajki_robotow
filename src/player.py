@@ -181,9 +181,9 @@ class Boss(Player):
                     self.shoot()
                     self.last_shoot_bullet = now
             elif abs(self.rect.centerx - self.player.rect.centerx) < 30:
-                 collision_possible = True
-                 if self.rect.centery > self.player.rect.centery:
-                     self.direction = UP
+                collision_possible = True
+                if self.rect.centery > self.player.rect.centery:
+                    self.direction = UP
 
             if abs(self.rect.centerx - self.player.rect.centerx) < 30:
                 collision_possible = True

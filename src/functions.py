@@ -44,6 +44,7 @@ def show_go_screen():
     draw_text(screen, "BAJKI ROBOTÓW", 84, WIDTH / 2, HEIGHT / 4)
     draw_text(screen, "Strzałki sterują robotem a spacja to atak", 42, WIDTH / 2, HEIGHT / 2)
     draw_text(screen, "Naciśnij dowolny klawisz żeby zacząć grę", 28, WIDTH / 2, HEIGHT * 3 / 4)
+    draw_text(screen, "Dojdź do krzyża", 28, WIDTH/2 , HEIGHT*4 / 5)
     draw_keyboard(screen, (WIDTH / 2) - keyboard_img.get_rect().width / 2, HEIGHT / 2 , keyboard_img)
     pygame.display.flip()
     waiting = True
@@ -109,6 +110,12 @@ def draw_lives(surf, x, y, lives, img):
 
 
 def draw_keyboard(surf, x, y, img):
+    img_rect = img.get_rect()
+    img_rect.x = x
+    img_rect.y = y
+    surf.blit(img, img_rect)
+
+def draw_red_cross(surf, x, y, img):
     img_rect = img.get_rect()
     img_rect.x = x
     img_rect.y = y

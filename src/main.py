@@ -34,6 +34,10 @@ def get_boss_mini_image(image):
 
 # Inicjalizowanie grafiki
 background = pygame.image.load(path.join(img_dir, "background-scifi.png")).convert()
+red_cross_img = pygame.image.load(path.join(img_dir, "red_cross.png")).convert()
+red_cross_convert_img = pygame.transform.scale(red_cross_img, (60, 60))
+red_cross_convert_img.set_colorkey(BLACK)
+
 
 # Dodawanie muzyki
 pygame.mixer.music.load(path.join(snd_dir, "CleytonRX - Battle RPG Theme Var.ogg"))
@@ -75,6 +79,7 @@ questions = pygame.sprite.LayeredUpdates()
 boss_fight = False
 running = True
 game_over = True
+
 while running:
     if game_over:
         show_go_screen()
@@ -120,7 +125,6 @@ while running:
                     all_sprites.add(block)
 
                 x += 60
-
         player = Player(all_sprites, bullets, blocks, False)
         all_sprites.add(player)
         players.add(player)
@@ -150,7 +154,8 @@ while running:
 
     screen.fill(BLACK)
     all_sprites.draw(screen)
-
+    if not boss_fight:
+        draw_red_cross(screen, 1680, 60, red_cross_convert_img)
     if boss_fight:
         draw_lives(screen, 80, 10, player.lives_player, get_player_mini_image(player.def_image))
         draw_lives(screen, 1630, 10, boss.lives_boss, get_boss_mini_image(boss.def_image))

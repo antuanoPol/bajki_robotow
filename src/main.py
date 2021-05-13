@@ -6,6 +6,7 @@ from src.levels import *
 from src.player import Boss
 from src.player import Player
 from src.sand import Sand
+from src.pre_fight import PreFight
 
 # iniclaizacja gry i utworzenie okna
 pygame.init()  # inicjalizuje cała bibliotekę
@@ -126,7 +127,9 @@ while running:
 
                 x += 60
         player = Player(all_sprites, bullets, blocks, False)
+        boss_info = PreFight()
         all_sprites.add(player)
+        all_sprites.add(boss_info)
         players.add(player)
         death = False
         win = False
@@ -142,7 +145,11 @@ while running:
     for player in players:
         player.can_move = not question_asked(questions)
 
-    if exit_door_opened(doors) and not boss_fight:
+    if exit_door_opened(doors) and not boss_info.initialized:
+        boss_info.initialized = True
+
+    if exit_door_opened(doors) and not boss_fight and boss_info.closed:
+        boss_info.kill()
         for block in inner_blocks:
             block.kill()
         for door in doors:

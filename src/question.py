@@ -155,9 +155,9 @@ class Question(pygame.sprite.Sprite):
         for text_index in range(len(self.question_data_text)):
             if text_index == self.selected:
                 self.question_with_answers_surfs[text_index] = self.font.render(self.question_data_text[text_index], 1,
-                                                                                WHITE)
+                                                                                RED)
             else:
-                self.question_with_answers_surfs[text_index] = self.font.render(self.question_data_text[text_index], 1, BLUE)
+                self.question_with_answers_surfs[text_index] = self.font.render(self.question_data_text[text_index], 1, WHITE)
         i = 40
 
         for text_surf_index in range(len(self.question_with_answers_surfs)):

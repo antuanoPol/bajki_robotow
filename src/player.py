@@ -13,17 +13,8 @@ pygame.mixer.init()
 shoot_sound = pygame.mixer.Sound(path.join(snd_dir, "heat-vision.mp3"))
 shoot_sound_boss = pygame.mixer.Sound(path.join(snd_dir, "mixkit-laser-weapon-shot-1681.wav"))
 
-boss_animation = {}
-boss_animation[LEFT] = []
-boss_animation[DOWN] = []
-boss_animation[UP] = []
-boss_animation[RIGHT] = []
-
-player_animation = {}
-player_animation[LEFT] = []
-player_animation[DOWN] = []
-player_animation[UP] = []
-player_animation[RIGHT] = []
+boss_animation = {LEFT: [], DOWN: [], UP: [], RIGHT: []}
+player_animation = {LEFT: [], DOWN: [], UP: [], RIGHT: []}
 
 for direction in [LEFT, RIGHT, UP, DOWN]:
     for i in range(4):
@@ -142,11 +133,10 @@ class Player(pygame.sprite.Sprite):
             self.rect.center = center
 
 
-
 class Boss(Player):
     def __init__(self, all_sprites, bullets, blocks, if_boss, player=None):
         super().__init__(all_sprites, bullets, blocks, if_boss)
-        self.shoot_delay = 200
+        self.shoot_delay = 1200
         self.def_image = boss_animation[UP][0]
         self.if_boss = if_boss
         self.player = player
@@ -170,7 +160,6 @@ class Boss(Player):
         self.rect.y += self.speedy
         self.rect.x += self.speedx
 
-
     def position(self):
         self.rect.centerx = 340
         self.rect.bottom = HEIGHT - 240
@@ -180,7 +169,7 @@ class Boss(Player):
             (self.player.rect.centerx - self.rect.centerx) ** 2 + (self.player.rect.centery - self.rect.centery) ** 2)
         now = pygame.time.get_ticks()
         collision_possible = False
-        if dist > 300:
+        if dist > 200:
             if abs(self.rect.centery - self.player.rect.centery) < 30:
                 collision_possible = True
                 if self.rect.centerx > self.player.rect.centerx:
@@ -191,27 +180,27 @@ class Boss(Player):
                     self.direction = RIGHT
                     self.shoot()
                     self.last_shoot_bullet = now
-            # elif abs(self.rect.centerx - self.player.rect.centerx) < 30:
-            #     collision_possible = True
-            #     if self.rect.centery > self.player.rect.centery:
-            #         self.direction = UP
-            if dist > 200:
-                if abs(self.rect.centerx - self.player.rect.centerx) < 30:
-                    collision_possible = True
-                    if self.rect.centery > self.player.rect.centery:
-                        self.direction = UP
-                        self.shoot()
-                        self.last_shoot_bullet = now
-                    else:
-                        self.direction = DOWN
-                        self.shoot()
-                        self.last_shoot_bullet = now
-                # elif abs(self.rect.centery - self.player.rect.centery) < 30:
-                #     collision_possible = True
-                #     if self.rect.centery > self.player.rect.centery:
-                #         self.direction = UP
-                #     else:
-                #         self.direction = DOWN
+            elif abs(self.rect.centerx - self.player.rect.centerx) < 30:
+                 collision_possible = True
+                 if self.rect.centery > self.player.rect.centery:
+                     self.direction = UP
+
+            if abs(self.rect.centerx - self.player.rect.centerx) < 30:
+                collision_possible = True
+                if self.rect.centery > self.player.rect.centery:
+                    self.direction = UP
+                    self.shoot()
+                    self.last_shoot_bullet = now
+                else:
+                    self.direction = DOWN
+                    self.shoot()
+                    self.last_shoot_bullet = now
+            elif abs(self.rect.centery - self.player.rect.centery) < 30:
+                collision_possible = True
+                if self.rect.centery > self.player.rect.centery:
+                    self.direction = UP
+                else:
+                    self.direction = DOWN
 
         if collision_possible:
             self.last_update_random_pos = now
@@ -266,6 +255,7 @@ class Boss(Player):
             self.bullets.add(bullet)
             shoot_sound_boss.play()
             self.last_shoot = now
+
     def update(self):
         if not self.can_move:
             return
@@ -274,4 +264,3 @@ class Boss(Player):
         self.move()
         self.detect_colison()
         self.reset_direction()
-

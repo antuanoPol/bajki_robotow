@@ -91,10 +91,10 @@ while running:
                     block = Block(x, y, 1)
                     blocks.add(block)
                     all_sprites.add(block)
+                    sand = Sand(x, y)
+                    all_sprites.add(sand)
                     if block_name != "F":
                         inner_blocks.add(block)
-                        sand = Sand(x, y)
-                        all_sprites.add(sand)
                 if block_name == " ":
                     sand = Sand(x, y)
                     all_sprites.add(sand)
@@ -162,8 +162,8 @@ while running:
     all_sprites.draw(screen)
 
     if boss_fight:
-        draw_lives(screen, 80, 80, player.lives_player, get_player_mini_image(player.def_image))
-        draw_lives(screen, 1630, 80, boss.lives_boss, get_boss_mini_image(boss.def_image))
+        draw_lives(screen, 80, 10, player.lives_player, get_player_mini_image(player.def_image))
+        draw_lives(screen, 1630, 10, boss.lives_boss, get_boss_mini_image(boss.def_image))
         hits_player = pygame.sprite.spritecollide(player, bullets, True)
         for hit_player in hits_player:
             player.lives_player = player.lives_player - 1
